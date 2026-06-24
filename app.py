@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # =============================================================================
 # STREAMLIT WEB APP - ANALISIS AHP
 # Sistem Informasi Dokumentasi dan Arsip Digital Kampus
@@ -16,20 +16,20 @@ import io
 import warnings
 warnings.filterwarnings('ignore')
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 # KONFIGURASI HALAMAN
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 
 st.set_page_config(
-    page_title="AHP â€“ Kepuasan Pengguna | Matla Islamic Academy",
-    page_icon="ðŸ“Š",
+    page_title="AHP – Kepuasan Pengguna | Matla Islamic Academy",
+    page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 # TEMA & CSS DINAMIS (DARK / LIGHT MODE)
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 
 if 'dark_mode' not in st.session_state:
     st.session_state.dark_mode = True
@@ -104,16 +104,16 @@ label {{ color: {v['text']} !important; }}
 st.markdown(get_theme_css(st.session_state.dark_mode), unsafe_allow_html=True)
 
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 
 
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 # KONSTANTA
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
+# ──────────────────────────────────────────────────────────────────────────────
 # KONSTANTA
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 
 FAKTOR_SHORT = [
     "Kemudahan Penggunaan",
@@ -135,32 +135,32 @@ WARNA_TEXT = '#F8FAFC'
 WARNA_SUBTEXT = '#94A3B8'
 
 SKALA_SAATY = {
-    "1 â€“ Sama penting": 1,
+    "1 – Sama penting": 1,
     "2": 2,
-    "3 â€“ Sedikit lebih penting": 3,
+    "3 – Sedikit lebih penting": 3,
     "4": 4,
-    "5 â€“ Lebih penting": 5,
+    "5 – Lebih penting": 5,
     "6": 6,
-    "7 â€“ Sangat lebih penting": 7,
+    "7 – Sangat lebih penting": 7,
     "8": 8,
-    "9 â€“ Mutlak lebih penting": 9,
+    "9 – Mutlak lebih penting": 9,
 }
 
-# Konversi skala kuesioner 1-5 bipolar â†’ nilai AHP Saaty
+# Konversi skala kuesioner 1-5 bipolar → nilai AHP Saaty
 KONVERSI_FORM_AHP = {
-    1: 5.0,   # Kiri jauh lebih penting  â†’ Saaty 5
-    2: 3.0,   # Kiri lebih penting       â†’ Saaty 3
-    3: 1.0,   # Sama penting             â†’ Saaty 1
-    4: 1/3,   # Kanan lebih penting      â†’ Saaty 1/3
-    5: 1/5,   # Kanan jauh lebih penting â†’ Saaty 1/5
+    1: 5.0,   # Kiri jauh lebih penting  → Saaty 5
+    2: 3.0,   # Kiri lebih penting       → Saaty 3
+    3: 1.0,   # Sama penting             → Saaty 1
+    4: 1/3,   # Kanan lebih penting      → Saaty 1/3
+    5: 1/5,   # Kanan jauh lebih penting → Saaty 1/5
 }
 
 FORM_LABELS = [
-    "1 â€“ Kiri jauh lebih penting",
-    "2 â€“ Kiri lebih penting",
-    "3 â€“ Sama penting",
-    "4 â€“ Kanan lebih penting",
-    "5 â€“ Kanan jauh lebih penting",
+    "1 – Kiri jauh lebih penting",
+    "2 – Kiri lebih penting",
+    "3 – Sama penting",
+    "4 – Kanan lebih penting",
+    "5 – Kanan jauh lebih penting",
 ]
 
 def konversi_skala_form(nilai: int) -> float:
@@ -179,9 +179,9 @@ def konversi_matriks_form(matriks_form: np.ndarray) -> np.ndarray:
     np.fill_diagonal(m, 1.0)
     return m
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 # FUNGSI AHP CORE
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 
 def enforce_reciprocal(matriks: np.ndarray) -> np.ndarray:
     m = matriks.astype(float).copy()
@@ -211,9 +211,9 @@ def agregasi_geometric_mean(list_matriks: list) -> np.ndarray:
             matriks_agg[i][j] = np.exp(np.mean(np.log(vals)))
     return matriks_agg
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 # FUNGSI VISUALISASI MATPLOTLIB
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 
 def buat_chart_lengkap(matriks, m_norm, bobot, lambda_max, ci, ri, cr, judul=""):
     idx_sorted = np.argsort(bobot)[::-1]
@@ -301,7 +301,7 @@ def buat_chart_lengkap(matriks, m_norm, bobot, lambda_max, ci, ri, cr, judul="")
     cr_color = '#10B981' if cr <= 0.1 else '#EF4444'
     ax5.text(0, -0.15, f'CR = {cr:.4f}', ha='center', fontsize=15,
              fontweight='bold', color=cr_color)
-    ax5.text(0, -0.35, 'KONSISTEN âœ“' if cr <= 0.1 else 'TIDAK KONSISTEN âœ—',
+    ax5.text(0, -0.35, 'KONSISTEN ✓' if cr <= 0.1 else 'TIDAK KONSISTEN ✗',
              ha='center', fontsize=12, fontweight='bold', color=cr_color)
     ax5.text(-1.0, 0.05, '0.0\n(Ideal)', ha='center', fontsize=8, color='#64748B')
     ax5.text(1.0, 0.05, '0.2+\n(Buruk)', ha='center', fontsize=8, color='#64748B')
@@ -315,13 +315,13 @@ def buat_chart_lengkap(matriks, m_norm, bobot, lambda_max, ci, ri, cr, judul="")
     ax6.axis('off')
     prioritas_utama = FAKTOR_SHORT[np.argmax(bobot)]
     info_items = [
-        ("Î»max (Lambda Max)", f"{lambda_max:.6f}"),
+        ("λmax (Lambda Max)", f"{lambda_max:.6f}"),
         ("Jumlah Kriteria (n)", f"{N}"),
         ("Consistency Index (CI)", f"{ci:.6f}"),
         ("Random Index (RI)", f"{ri}"),
         ("Consistency Ratio (CR)", f"{cr:.6f}"),
-        ("Batas Konsistensi", "â‰¤ 0.10"),
-        ("Status", "KONSISTEN âœ“" if cr <= 0.1 else "TIDAK KONSISTEN âœ—"),
+        ("Batas Konsistensi", "≤ 0.10"),
+        ("Status", "KONSISTEN ✓" if cr <= 0.1 else "TIDAK KONSISTEN ✗"),
         ("Prioritas Utama", prioritas_utama),
         ("Bobot Tertinggi", f"{bobot.max()*100:.2f}%"),
     ]
@@ -365,9 +365,9 @@ def buat_chart_per_responden(list_matriks, list_nama):
     return fig
 
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 # FUNGSI EXPORT EXCEL
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 
 def export_excel(matriks, m_norm, bobot, lambda_max, ci, ri, cr) -> bytes:
     buf = io.BytesIO()
@@ -398,9 +398,9 @@ def export_chart(fig) -> bytes:
     buf.seek(0)
     return buf.getvalue()
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 # KOMPONEN UI BERULANG
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 
 def tampil_hasil(matriks, m_norm, bobot, lambda_max, ci, ri, cr, mode_label=""):
     """Menampilkan seluruh hasil AHP: metrics, ranking, chart, download."""
@@ -415,7 +415,7 @@ def tampil_hasil(matriks, m_norm, bobot, lambda_max, ci, ri, cr, mode_label=""):
         </div>""", unsafe_allow_html=True)
     with col2:
         st.markdown(f"""<div class="metric-box">
-            <div class="label">Î»max</div>
+            <div class="label">λmax</div>
             <div class="value">{lambda_max:.4f}</div>
         </div>""", unsafe_allow_html=True)
     with col3:
@@ -424,8 +424,8 @@ def tampil_hasil(matriks, m_norm, bobot, lambda_max, ci, ri, cr, mode_label=""):
             <div class="value" style="font-size:1rem;color:#A78BFA">{FAKTOR_KODE[idx_top]}</div>
         </div>""", unsafe_allow_html=True)
     with col4:
-        status_html = ('<span class="badge-ok">âœ“ KONSISTEN</span>'
-                       if cr <= 0.1 else '<span class="badge-fail">âœ— TIDAK KONSISTEN</span>')
+        status_html = ('<span class="badge-ok">✓ KONSISTEN</span>'
+                       if cr <= 0.1 else '<span class="badge-fail">✗ TIDAK KONSISTEN</span>')
         st.markdown(f"""<div class="metric-box">
             <div class="label">Status</div>
             <div style="margin-top:6px">{status_html}</div>
@@ -434,12 +434,12 @@ def tampil_hasil(matriks, m_norm, bobot, lambda_max, ci, ri, cr, mode_label=""):
     st.markdown("<br>", unsafe_allow_html=True)
 
     # Tabel ranking + tabs grafik
-    tab_rank, tab_chart, tab_matrix = st.tabs(["ðŸ† Peringkat", "ðŸ“Š Grafik", "ðŸ”¢ Matriks Detail"])
+    tab_rank, tab_chart, tab_matrix = st.tabs(["�?� Peringkat", "📊 Grafik", "🔢 Matriks Detail"])
 
     with tab_rank:
         st.markdown("#### Bobot Prioritas Faktor Kepuasan Pengguna")
         idx_sorted = np.argsort(bobot)[::-1]
-        emoji_rank = ["ðŸ¥‡", "ðŸ¥ˆ", "ðŸ¥‰", "4ï¸âƒ£", "5ï¸âƒ£"]
+        emoji_rank = ["🥇", "🥈", "🥉", "4�?⃣", "5�?⃣"]
         for rank, i in enumerate(idx_sorted):
             pct = bobot[i] * 100
             bar_width = int(pct * 2)
@@ -458,12 +458,12 @@ def tampil_hasil(matriks, m_norm, bobot, lambda_max, ci, ri, cr, mode_label=""):
     with tab_chart:
         with st.spinner("Membuat grafik..."):
             fig = buat_chart_lengkap(matriks, m_norm, bobot, lambda_max, ci, ri, cr,
-                                     judul=f"Analisis AHP â€“ {mode_label}" if mode_label else "")
+                                     judul=f"Analisis AHP – {mode_label}" if mode_label else "")
             st.pyplot(fig, use_container_width=True)
             chart_bytes = export_chart(fig)
             plt.close(fig)
         st.download_button(
-            label="â¬‡ï¸ Download Grafik (PNG)",
+            label="⬇�? Download Grafik (PNG)",
             data=chart_bytes,
             file_name=f"ahp_{mode_label.lower().replace(' ', '_')}_grafik.png" if mode_label else "ahp_grafik.png",
             mime="image/png"
@@ -483,43 +483,43 @@ def tampil_hasil(matriks, m_norm, bobot, lambda_max, ci, ri, cr, mode_label=""):
             st.dataframe(df_norm, use_container_width=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("#### â¬‡ï¸ Download Hasil")
+    st.markdown("#### ⬇�? Download Hasil")
     col_dl1, col_dl2 = st.columns(2)
     with col_dl1:
         excel_bytes = export_excel(matriks, m_norm, bobot, lambda_max, ci, ri, cr)
         fname = f"ahp_{mode_label.lower().replace(' ', '_')}.xlsx" if mode_label else "hasil_ahp.xlsx"
         st.download_button(
-            label="ðŸ“¥ Download Excel (Lengkap)",
+            label="📥 Download Excel (Lengkap)",
             data=excel_bytes,
             file_name=fname,
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         )
     with col_dl2:
         if cr <= 0.1:
-            st.markdown('<div class="success-box">âœ“ Matriks perbandingan <strong>konsisten</strong>. Data dapat digunakan untuk penelitian.</div>', unsafe_allow_html=True)
+            st.markdown('<div class="success-box">✓ Matriks perbandingan <strong>konsisten</strong>. Data dapat digunakan untuk penelitian.</div>', unsafe_allow_html=True)
         else:
-            st.markdown('<div class="warning-box">âš ï¸ CR > 0.10 â†’ Tidak konsisten. Tinjau kembali penilaian perbandingan Anda.</div>', unsafe_allow_html=True)
+            st.markdown('<div class="warning-box">⚠�? CR > 0.10 → Tidak konsisten. Tinjau kembali penilaian perbandingan Anda.</div>', unsafe_allow_html=True)
 
 
 def widget_input_matriks(prefix: str, default_form: np.ndarray = None):
     """
-    Widget input matriks 5Ã—5 dengan skala kuesioner 1-5 bipolar.
+    Widget input matriks 5×5 dengan skala kuesioner 1-5 bipolar.
     Otomatis konversi ke nilai AHP dan isi reciprocal.
 
     Skala:
-      1 = Kiri jauh lebih penting  â†’ AHP 5
-      2 = Kiri lebih penting       â†’ AHP 3
-      3 = Sama penting             â†’ AHP 1
-      4 = Kanan lebih penting      â†’ AHP 1/3
-      5 = Kanan jauh lebih penting â†’ AHP 1/5
+      1 = Kiri jauh lebih penting  → AHP 5
+      2 = Kiri lebih penting       → AHP 3
+      3 = Sama penting             → AHP 1
+      4 = Kanan lebih penting      → AHP 1/3
+      5 = Kanan jauh lebih penting → AHP 1/5
     """
     if default_form is None:
         default_form = np.full((N, N), 3)  # default semua = 3 (sama penting)
 
     st.markdown("""
     <div class="info-box">
-    ðŸ’¡ <strong>Petunjuk pengisian:</strong><br>
-    Pilih nilai 1â€“5 untuk setiap pasang faktor sesuai tingkat kepentingan.<br>
+    💡 <strong>Petunjuk pengisian:</strong><br>
+    Pilih nilai 1–5 untuk setiap pasang faktor sesuai tingkat kepentingan.<br>
     <b>1</b> = Faktor <em>kiri</em> jauh lebih penting &nbsp;|&nbsp;
     <b>3</b> = Sama penting &nbsp;|&nbsp;
     <b>5</b> = Faktor <em>kanan</em> jauh lebih penting
@@ -538,7 +538,7 @@ def widget_input_matriks(prefix: str, default_form: np.ndarray = None):
 
             label = (
                 f"**{FAKTOR_KODE[i]}** ({FAKTOR_SHORT[i]}) "
-                f"â†” **{FAKTOR_KODE[j]}** ({FAKTOR_SHORT[j]})"
+                f"↔ **{FAKTOR_KODE[j]}** ({FAKTOR_SHORT[j]})"
             )
             sel = st.select_slider(
                 label,
@@ -546,11 +546,11 @@ def widget_input_matriks(prefix: str, default_form: np.ndarray = None):
                 value=FORM_LABELS[default_val - 1],
                 key=key
             )
-            form_val = FORM_LABELS.index(sel) + 1   # 1â€“5
+            form_val = FORM_LABELS.index(sel) + 1   # 1–5
             ahp_val  = konversi_skala_form(form_val)
 
             matriks_form[i][j] = form_val
-            matriks_form[j][i] = 6 - form_val        # cermin: 1â†”5, 2â†”4, 3â†”3
+            matriks_form[j][i] = 6 - form_val        # cermin: 1↔5, 2↔4, 3↔3
             matriks_ahp[i][j]  = ahp_val
             matriks_ahp[j][i]  = 1.0 / ahp_val
 
@@ -558,10 +558,10 @@ def widget_input_matriks(prefix: str, default_form: np.ndarray = None):
     np.fill_diagonal(matriks_form, 3)
 
     # Preview: tampilkan jawaban form DAN nilai AHP
-    with st.expander("ðŸ‘ï¸ Preview Matriks (Jawaban Form & Nilai AHP)", expanded=False):
+    with st.expander("�?�? Preview Matriks (Jawaban Form & Nilai AHP)", expanded=False):
         col_f, col_a = st.columns(2)
         with col_f:
-            st.markdown("**Jawaban Form (Skala 1â€“5)**")
+            st.markdown("**Jawaban Form (Skala 1–5)**")
             st.dataframe(
                 pd.DataFrame(matriks_form, index=FAKTOR_KODE, columns=FAKTOR_KODE),
                 use_container_width=True
@@ -576,26 +576,26 @@ def widget_input_matriks(prefix: str, default_form: np.ndarray = None):
     return matriks_ahp
 
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 # HELPER: UPLOAD KUESIONER
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 
 PAIRS_INFO = [
-    (0, 1, "Kemudahan Penggunaan â†” Kelengkapan Fitur"),
-    (0, 2, "Kemudahan Penggunaan â†” Kecepatan Akses"),
-    (0, 3, "Kemudahan Penggunaan â†” Keamanan Data"),
-    (0, 4, "Kemudahan Penggunaan â†” Kemudahan Pencarian Arsip"),
-    (1, 2, "Kelengkapan Fitur â†” Kecepatan Akses"),
-    (1, 3, "Kelengkapan Fitur â†” Keamanan Data"),
-    (1, 4, "Kelengkapan Fitur â†” Kemudahan Pencarian Arsip"),
-    (2, 3, "Kecepatan Akses â†” Keamanan Data"),
-    (2, 4, "Kecepatan Akses â†” Kemudahan Pencarian Arsip"),
-    (3, 4, "Keamanan Data â†” Kemudahan Pencarian Arsip"),
+    (0, 1, "Kemudahan Penggunaan ↔ Kelengkapan Fitur"),
+    (0, 2, "Kemudahan Penggunaan ↔ Kecepatan Akses"),
+    (0, 3, "Kemudahan Penggunaan ↔ Keamanan Data"),
+    (0, 4, "Kemudahan Penggunaan ↔ Kemudahan Pencarian Arsip"),
+    (1, 2, "Kelengkapan Fitur ↔ Kecepatan Akses"),
+    (1, 3, "Kelengkapan Fitur ↔ Keamanan Data"),
+    (1, 4, "Kelengkapan Fitur ↔ Kemudahan Pencarian Arsip"),
+    (2, 3, "Kecepatan Akses ↔ Keamanan Data"),
+    (2, 4, "Kecepatan Akses ↔ Kemudahan Pencarian Arsip"),
+    (3, 4, "Keamanan Data ↔ Kemudahan Pencarian Arsip"),
 ]
 
 def find_pair_columns(cols: list):
     """Deteksi otomatis 10 kolom perbandingan dari header spreadsheet."""
-    # Strategi 1: cari kolom yang mengandung karakter â†”
+    # Strategi 1: cari kolom yang mengandung karakter ↔
     pair_cols = [c for c in cols if '\u2194' in str(c)]
     if len(pair_cols) >= 10:
         return pair_cols[:10]
@@ -643,22 +643,22 @@ def buat_template_excel() -> bytes:
     buf.seek(0)
     return buf.getvalue()
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 # SIDEBAR NAVIGASI
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 
 with st.sidebar:
     st.markdown("""
     <div style="text-align:center;padding:20px 0 8px 0">
-        <div style="font-size:2.5rem">ðŸ“Š</div>
+        <div style="font-size:2.5rem">📊</div>
         <div style="color:#F8FAFC;font-size:1.1rem;font-weight:700;margin-top:6px">AHP Analyzer</div>
         <div style="color:#64748B;font-size:0.75rem">Matla Islamic Academy</div>
     </div>
     <hr style="border-color:#334155;margin:10px 0 12px 0">
     """, unsafe_allow_html=True)
 
-    # â”€â”€ Toggle Dark / Light Mode â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    icon = "ðŸŒ™" if st.session_state.dark_mode else "â˜€ï¸"
+    # ── Toggle Dark / Light Mode ──────────────────────────────────────────────
+    icon = "🌙" if st.session_state.dark_mode else "☀�?"
     label = f"{icon} Mode {'Gelap' if st.session_state.dark_mode else 'Terang'}"
     new_dark = st.toggle(label, value=st.session_state.dark_mode, key="theme_toggle")
     if new_dark != st.session_state.dark_mode:
@@ -669,7 +669,7 @@ with st.sidebar:
 
     menu = st.radio(
         "Navigasi",
-        options=["ðŸ  Beranda", "ðŸ“‹ Input Manual", "ðŸ“Š Upload Hasil Kuesioner", "ðŸ“– Panduan AHP"],
+        options=["�?� Beranda", "📋 Input Manual", "📊 Upload Hasil Kuesioner", "📖 Panduan AHP"],
         label_visibility="collapsed"
     )
 
@@ -680,14 +680,14 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 # HALAMAN: BERANDA
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 
-if menu == "ðŸ  Beranda":
+if menu == "�?� Beranda":
     st.markdown("""
     <div class="hero-header">
-        <h1>ðŸ“Š Analisis AHP Kepuasan Pengguna</h1>
+        <h1>📊 Analisis AHP Kepuasan Pengguna</h1>
         <p>Sistem Informasi Dokumentasi & Arsip Digital Kampus Berbasis Web<br>
         <strong style="color:#60A5FA">Matla Islamic Academy</strong></p>
     </div>
@@ -696,26 +696,26 @@ if menu == "ðŸ  Beranda":
     col1, col2, col3 = st.columns(3)
     with col1:
         st.markdown("""<div class="ahp-card" style="text-align:center">
-            <div style="font-size:2rem">ðŸŽ¯</div>
+            <div style="font-size:2rem">🎯</div>
             <div style="color:#60A5FA;font-weight:700;margin:8px 0 4px">5 Kriteria</div>
             <div style="color:#94A3B8;font-size:0.85rem">Faktor kepuasan pengguna yang dianalisis</div>
         </div>""", unsafe_allow_html=True)
     with col2:
         st.markdown("""<div class="ahp-card" style="text-align:center">
-            <div style="font-size:2rem">âš–ï¸</div>
+            <div style="font-size:2rem">⚖�?</div>
             <div style="color:#A78BFA;font-weight:700;margin:8px 0 4px">Metode AHP</div>
             <div style="color:#94A3B8;font-size:0.85rem">Analytical Hierarchy Process (Saaty, 1980)</div>
         </div>""", unsafe_allow_html=True)
     with col3:
         st.markdown("""<div class="ahp-card" style="text-align:center">
-            <div style="font-size:2rem">âœ…</div>
+            <div style="font-size:2rem">✅</div>
             <div style="color:#34D399;font-weight:700;margin:8px 0 4px">Uji Konsistensi</div>
-            <div style="color:#94A3B8;font-size:0.85rem">CR â‰¤ 0.10 â†’ hasil valid & dapat digunakan</div>
+            <div style="color:#94A3B8;font-size:0.85rem">CR ≤ 0.10 → hasil valid & dapat digunakan</div>
         </div>""", unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("""<div class="ahp-card">
-        <h3 style="color:#F8FAFC;margin-top:0">ðŸ“Œ Faktor yang Dianalisis</h3>""", unsafe_allow_html=True)
+        <h3 style="color:#F8FAFC;margin-top:0">📌 Faktor yang Dianalisis</h3>""", unsafe_allow_html=True)
 
     for i, (kode, nama) in enumerate(zip(FAKTOR_KODE, FAKTOR_SHORT)):
         st.markdown(f"""
@@ -729,32 +729,32 @@ if menu == "ðŸ  Beranda":
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("""<div class="ahp-card">
-        <h3 style="color:#F8FAFC;margin-top:0">ðŸš€ Cara Penggunaan</h3>
+        <h3 style="color:#F8FAFC;margin-top:0">🚀 Cara Penggunaan</h3>
         <ol style="color:#94A3B8;line-height:2">
-            <li><strong style="color:#F8FAFC">Mode 1 â€“ Input Agregasi</strong>: Langsung input matriks perbandingan yang sudah dirata-rata dari semua responden, atau upload Excel.</li>
-            <li><strong style="color:#F8FAFC">Mode 2 â€“ Multi-Responden</strong>: Input matriks per responden secara terpisah, lalu sistem menghitung rata-rata geometrik otomatis.</li>
+            <li><strong style="color:#F8FAFC">Mode 1 – Input Agregasi</strong>: Langsung input matriks perbandingan yang sudah dirata-rata dari semua responden, atau upload Excel.</li>
+            <li><strong style="color:#F8FAFC">Mode 2 – Multi-Responden</strong>: Input matriks per responden secara terpisah, lalu sistem menghitung rata-rata geometrik otomatis.</li>
         </ol>
     </div>""", unsafe_allow_html=True)
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-# HALAMAN: MODE 1 â€“ INPUT AGREGASI
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
+# HALAMAN: MODE 1 – INPUT AGREGASI
+# ──────────────────────────────────────────────────────────────────────────────
 
-elif menu == "ðŸ“‹ Input Manual":
-    st.markdown('<div class="hero-header"><h1>ðŸ“‹ Mode 1: Matriks Agregasi</h1><p>Input satu matriks perbandingan (sudah dirata-rata dari semua responden)</p></div>', unsafe_allow_html=True)
+elif menu == "📋 Input Manual":
+    st.markdown('<div class="hero-header"><h1>📋 Mode 1: Matriks Agregasi</h1><p>Input satu matriks perbandingan (sudah dirata-rata dari semua responden)</p></div>', unsafe_allow_html=True)
 
     # Pilihan cara input
     cara_input = st.radio(
         "Pilih cara input data:",
-        ["âœï¸ Input Manual (Slider)", "ðŸ“¤ Upload File Excel"],
+        ["�?�? Input Manual (Slider)", "📤 Upload File Excel"],
         horizontal=True
     )
 
     matriks_input = None
 
-    if cara_input == "âœï¸ Input Manual (Slider)":
+    if cara_input == "�?�? Input Manual (Slider)":
         st.markdown('<div class="ahp-card">', unsafe_allow_html=True)
-        st.markdown("### ðŸ”¢ Input Matriks Perbandingan Berpasangan")
+        st.markdown("### 🔢 Input Matriks Perbandingan Berpasangan")
 
         # Preset demo: nilai form 1-5 (bukan Saaty langsung)
         if st.checkbox("Gunakan data contoh (untuk demo)"):
@@ -776,9 +776,9 @@ elif menu == "ðŸ“‹ Input Manual":
 
     else:  # Upload Excel
         st.markdown('<div class="ahp-card">', unsafe_allow_html=True)
-        st.markdown("### ðŸ“¤ Upload File Excel")
+        st.markdown("### 📤 Upload File Excel")
         st.markdown("""<div class="info-box">
-            Format Excel: Sheet pertama berisi matriks 5Ã—5 dengan nilai perbandingan.
+            Format Excel: Sheet pertama berisi matriks 5×5 dengan nilai perbandingan.
             Baris dan kolom sesuai urutan: K1, K2, K3, K4, K5.<br>
             <strong>Contoh file</strong>: <code>template_kuesioner_ahp.xlsx</code> yang sudah ada di folder proyek.
         </div>""", unsafe_allow_html=True)
@@ -794,54 +794,54 @@ elif menu == "ðŸ“‹ Input Manual":
                     is_form_scale = bool(np.all((raw >= 1) & (raw <= 5)) and np.any(raw > 1.5))
                     if is_form_scale:
                         matriks_input = konversi_matriks_form(raw)
-                        st.success("âœ… File berhasil dibaca dan dikonversi dari skala form 1â€“5 ke nilai AHP!")
+                        st.success("✅ File berhasil dibaca dan dikonversi dari skala form 1–5 ke nilai AHP!")
                     else:
                         matriks_input = raw
-                        st.success("âœ… File berhasil dibaca (diasumsikan sudah dalam skala AHP Saaty).")
+                        st.success("✅ File berhasil dibaca (diasumsikan sudah dalam skala AHP Saaty).")
                     st.dataframe(df_upload.round(4), use_container_width=True)
-                    with st.expander("ðŸ“Š Matriks AHP (setelah konversi)"):
+                    with st.expander("📊 Matriks AHP (setelah konversi)"):
                         st.dataframe(
                             pd.DataFrame(matriks_input.round(4),
                                          index=FAKTOR_KODE, columns=FAKTOR_KODE),
                             use_container_width=True
                         )
                 else:
-                    st.error(f"âŒ Ukuran matriks harus {N}Ã—{N}. File yang diupload: {df_upload.shape[0]}Ã—{df_upload.shape[1]}")
+                    st.error(f"�?� Ukuran matriks harus {N}×{N}. File yang diupload: {df_upload.shape[0]}×{df_upload.shape[1]}")
             except Exception as e:
-                st.error(f"âŒ Gagal membaca file: {e}")
+                st.error(f"�?� Gagal membaca file: {e}")
         st.markdown('</div>', unsafe_allow_html=True)
 
     # Hitung
     if matriks_input is not None:
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("âš¡ Hitung AHP Sekarang", use_container_width=True):
+        if st.button("⚡ Hitung AHP Sekarang", use_container_width=True):
             with st.spinner("Menghitung AHP..."):
                 m, m_norm, bobot, lmax, ci, ri, cr = hitung_ahp(matriks_input)
             st.markdown("---")
-            st.markdown("## ðŸ“Š Hasil Analisis AHP")
+            st.markdown("## 📊 Hasil Analisis AHP")
             tampil_hasil(m, m_norm, bobot, lmax, ci, ri, cr, "Agregasi")
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 # HALAMAN: UPLOAD HASIL KUESIONER
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 
-elif menu == "ðŸ“Š Upload Hasil Kuesioner":
-    st.markdown('<div class="hero-header"><h1>ðŸ“Š Upload Hasil Kuesioner</h1><p>Upload file Excel/CSV hasil ekspor Google Forms â€” sistem hitung AHP otomatis</p></div>', unsafe_allow_html=True)
+elif menu == "📊 Upload Hasil Kuesioner":
+    st.markdown('<div class="hero-header"><h1>📊 Upload Hasil Kuesioner</h1><p>Upload file Excel/CSV hasil ekspor Google Forms — sistem hitung AHP otomatis</p></div>', unsafe_allow_html=True)
 
-    # â”€â”€ Format & Template â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── Format & Template ─────────────────────────────────────────────────────
     st.markdown('<div class="ahp-card">', unsafe_allow_html=True)
-    st.markdown("### ðŸ“‹ Format File yang Diterima")
+    st.markdown("### 📋 Format File yang Diterima")
     st.markdown("""
     Upload file **Excel (.xlsx)** atau **CSV (.csv)** hasil ekspor Google Forms dengan kolom:
     - `Nama Responden`, `Email`, `Peran Pengguna` *(opsional)*
-    - **10 kolom perbandingan** dengan nilai **1â€“5** sesuai skala kuesioner *(wajib)*
+    - **10 kolom perbandingan** dengan nilai **1–5** sesuai skala kuesioner *(wajib)*
 
     Urutan 10 kolom perbandingan:
     """)
     df_urutan = pd.DataFrame({
         'No': range(1, 11),
         'Kolom Perbandingan': [label for _, _, label in PAIRS_INFO],
-        'Nilai Valid': ['1 â€“ 5'] * 10
+        'Nilai Valid': ['1 – 5'] * 10
     })
     st.dataframe(df_urutan, use_container_width=True, hide_index=True)
 
@@ -849,18 +849,18 @@ elif menu == "ðŸ“Š Upload Hasil Kuesioner":
     col_dl, col_info = st.columns([1, 2])
     with col_dl:
         st.download_button(
-            label="â¬‡ï¸ Download Template Excel",
+            label="⬇�? Download Template Excel",
             data=buat_template_excel(),
             file_name="template_kuesioner_ahp.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
     with col_info:
-        st.markdown('<div class="info-box">ðŸ’¡ Download template, isi sesuai data kuesioner, lalu upload kembali di bawah.</div>', unsafe_allow_html=True)
+        st.markdown('<div class="info-box">💡 Download template, isi sesuai data kuesioner, lalu upload kembali di bawah.</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # â”€â”€ Upload File â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── Upload File ───────────────────────────────────────────────────────────
     st.markdown('<div class="ahp-card">', unsafe_allow_html=True)
-    st.markdown("### ðŸ“¤ Upload File Hasil Kuesioner")
+    st.markdown("### 📤 Upload File Hasil Kuesioner")
     uploaded_ks = st.file_uploader(
         "Pilih file Excel atau CSV hasil kuesioner",
         type=["xlsx", "xls", "csv"],
@@ -874,22 +874,22 @@ elif menu == "ðŸ“Š Upload Hasil Kuesioner":
             else:
                 df_ks = pd.read_excel(uploaded_ks)
 
-            st.success(f"âœ… File berhasil dibaca: **{len(df_ks)} baris** ditemukan")
-            with st.expander("ðŸ‘ï¸ Preview Data Kuesioner", expanded=True):
+            st.success(f"✅ File berhasil dibaca: **{len(df_ks)} baris** ditemukan")
+            with st.expander("�?�? Preview Data Kuesioner", expanded=True):
                 st.dataframe(df_ks, use_container_width=True)
 
             # Deteksi kolom pair
             pair_cols = find_pair_columns(list(df_ks.columns))
 
             if pair_cols and len(pair_cols) == 10:
-                st.markdown(f'<div class="success-box">âœ“ Berhasil mendeteksi 10 kolom perbandingan</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="success-box">✓ Berhasil mendeteksi 10 kolom perbandingan</div>', unsafe_allow_html=True)
                 st.markdown("<br>", unsafe_allow_html=True)
 
                 # Cari kolom nama (opsional)
                 nama_col = next((c for c in df_ks.columns
                                  if 'nama' in str(c).lower()), None)
 
-                if st.button("âš¡ Proses & Hitung AHP", use_container_width=True):
+                if st.button("⚡ Proses & Hitung AHP", use_container_width=True):
                     list_matriks = []
                     list_nama    = []
                     error_rows   = []
@@ -904,43 +904,43 @@ elif menu == "ðŸ“Š Upload Hasil Kuesioner":
                             error_rows.append(f"Baris {idx+1}: {e}")
 
                     for err in error_rows:
-                        st.warning(f"âš ï¸ {err}")
+                        st.warning(f"⚠�? {err}")
 
                     if len(list_matriks) > 0:
                         with st.spinner(f"Mengagregasi {len(list_matriks)} responden..."):
                             matriks_agg = agregasi_geometric_mean(list_matriks)
                             m, m_norm, bobot, lmax, ci, ri, cr = hitung_ahp(matriks_agg)
 
-                        st.success(f"âœ… Berhasil memproses **{len(list_matriks)} responden** dengan rata-rata geometrik")
+                        st.success(f"✅ Berhasil memproses **{len(list_matriks)} responden** dengan rata-rata geometrik")
                         st.markdown("---")
-                        st.markdown("## ðŸ“Š Hasil Analisis AHP")
+                        st.markdown("## 📊 Hasil Analisis AHP")
                         tampil_hasil(m, m_norm, bobot, lmax, ci, ri, cr, "Kuesioner")
 
                         # Heatmap per responden
                         if len(list_matriks) > 1:
                             st.markdown("---")
-                            st.markdown("### ðŸ”¥ Heatmap Matriks Per Responden")
+                            st.markdown("### 🔥 Heatmap Matriks Per Responden")
                             with st.spinner("Membuat heatmap..."):
                                 fig_resp = buat_chart_per_responden(list_matriks, list_nama)
                                 st.pyplot(fig_resp, use_container_width=True)
                                 chart_bytes = export_chart(fig_resp)
                                 plt.close(fig_resp)
                             st.download_button(
-                                "â¬‡ï¸ Download Heatmap Per Responden (PNG)",
+                                "⬇�? Download Heatmap Per Responden (PNG)",
                                 data=chart_bytes,
                                 file_name="ahp_per_responden.png",
                                 mime="image/png"
                             )
             else:
-                st.markdown('<div class="warning-box">âš ï¸ Tidak dapat mendeteksi 10 kolom perbandingan. Pastikan format file sesuai template yang disediakan.</div>', unsafe_allow_html=True)
+                st.markdown('<div class="warning-box">⚠�? Tidak dapat mendeteksi 10 kolom perbandingan. Pastikan format file sesuai template yang disediakan.</div>', unsafe_allow_html=True)
                 if pair_cols:
                     st.write("Kolom terdeteksi:", pair_cols)
 
         except Exception as e:
-            st.error(f"âŒ Gagal membaca file: {e}")
+            st.error(f"�?� Gagal membaca file: {e}")
 
     st.markdown('</div>', unsafe_allow_html=True)
-    st.markdown('<div class="hero-header"><h1>ðŸ‘¥ Mode 2: Multi-Responden</h1><p>Input matriks per responden â†’ agregasi otomatis dengan rata-rata geometrik</p></div>', unsafe_allow_html=True)
+    st.markdown('<div class="hero-header"><h1>👥 Mode 2: Multi-Responden</h1><p>Input matriks per responden → agregasi otomatis dengan rata-rata geometrik</p></div>', unsafe_allow_html=True)
 
     # Inisialisasi state
     if 'n_responden' not in st.session_state:
@@ -950,7 +950,7 @@ elif menu == "ðŸ“Š Upload Hasil Kuesioner":
 
     # Kontrol jumlah responden
     st.markdown('<div class="ahp-card">', unsafe_allow_html=True)
-    st.markdown("### âš™ï¸ Pengaturan Responden")
+    st.markdown("### ⚙�? Pengaturan Responden")
     col_r1, col_r2 = st.columns([1, 2])
     with col_r1:
         n_resp = st.number_input("Jumlah Responden", min_value=1, max_value=10,
@@ -974,7 +974,7 @@ elif menu == "ðŸ“Š Upload Hasil Kuesioner":
     # Pilihan cara input
     cara_input_multi = st.radio(
         "Pilih cara input data per responden:",
-        ["âœï¸ Input Manual (Slider)", "ðŸ“¤ Upload File Excel per Responden"],
+        ["�?�? Input Manual (Slider)", "📤 Upload File Excel per Responden"],
         horizontal=True
     )
 
@@ -982,7 +982,7 @@ elif menu == "ðŸ“Š Upload Hasil Kuesioner":
     list_nama = []
     semua_valid = True
 
-    if cara_input_multi == "âœï¸ Input Manual (Slider)":
+    if cara_input_multi == "�?�? Input Manual (Slider)":
         # Tab per responden
         tab_labels = [st.session_state.nama_responden[i] or f"Resp {i+1}" for i in range(n_resp)]
         tabs = st.tabs(tab_labels)
@@ -997,7 +997,7 @@ elif menu == "ðŸ“Š Upload Hasil Kuesioner":
             with tab:
                 st.markdown(f'<div class="ahp-card">', unsafe_allow_html=True)
                 nama = st.session_state.nama_responden[i] or f"Responden {i+1}"
-                st.markdown(f"#### Input Matriks â€“ {nama}")
+                st.markdown(f"#### Input Matriks – {nama}")
 
                 use_contoh = st.checkbox(f"Gunakan data contoh", key=f"contoh_resp_{i}")
                 default_m = CONTOH_MATRIKS[i % len(CONTOH_MATRIKS)] if use_contoh else np.ones((N, N))
@@ -1009,13 +1009,13 @@ elif menu == "ðŸ“Š Upload Hasil Kuesioner":
 
     else:  # Upload Excel per responden
         st.markdown('<div class="ahp-card">', unsafe_allow_html=True)
-        st.markdown("### ðŸ“¤ Upload File Excel per Responden")
-        st.markdown("""<div class="info-box">Upload satu file Excel per responden. Setiap file berisi matriks 5Ã—5 perbandingan berpasangan.</div>""", unsafe_allow_html=True)
+        st.markdown("### 📤 Upload File Excel per Responden")
+        st.markdown("""<div class="info-box">Upload satu file Excel per responden. Setiap file berisi matriks 5×5 perbandingan berpasangan.</div>""", unsafe_allow_html=True)
         st.markdown("<br>", unsafe_allow_html=True)
 
         for i in range(n_resp):
             nama = st.session_state.nama_responden[i] or f"Responden {i+1}"
-            up = st.file_uploader(f"Upload Excel â€“ {nama}", type=["xlsx", "xls"], key=f"upload_resp_{i}")
+            up = st.file_uploader(f"Upload Excel – {nama}", type=["xlsx", "xls"], key=f"upload_resp_{i}")
             if up:
                 try:
                     df_up = pd.read_excel(up, index_col=0, header=0)
@@ -1023,21 +1023,21 @@ elif menu == "ðŸ“Š Upload Hasil Kuesioner":
                         m = enforce_reciprocal(df_up.values.astype(float))
                         list_matriks.append(m)
                         list_nama.append(nama)
-                        st.success(f"âœ… {nama}: File berhasil dibaca")
+                        st.success(f"✅ {nama}: File berhasil dibaca")
                     else:
-                        st.error(f"âŒ {nama}: Ukuran matriks harus {N}Ã—{N}")
+                        st.error(f"�?� {nama}: Ukuran matriks harus {N}×{N}")
                         semua_valid = False
                 except Exception as e:
-                    st.error(f"âŒ {nama}: Gagal baca file â€“ {e}")
+                    st.error(f"�?� {nama}: Gagal baca file – {e}")
                     semua_valid = False
             else:
-                if cara_input_multi == "ðŸ“¤ Upload File Excel per Responden":
+                if cara_input_multi == "📤 Upload File Excel per Responden":
                     semua_valid = False
         st.markdown('</div>', unsafe_allow_html=True)
 
     # Hitung
     st.markdown("<br>", unsafe_allow_html=True)
-    hitung_btn = st.button("âš¡ Agregasi & Hitung AHP", use_container_width=True,
+    hitung_btn = st.button("⚡ Agregasi & Hitung AHP", use_container_width=True,
                             disabled=(len(list_matriks) == 0))
 
     if hitung_btn and len(list_matriks) > 0:
@@ -1045,34 +1045,34 @@ elif menu == "ðŸ“Š Upload Hasil Kuesioner":
             matriks_agg = agregasi_geometric_mean(list_matriks)
             m, m_norm, bobot, lmax, ci, ri, cr = hitung_ahp(matriks_agg)
 
-        st.success(f"âœ… Berhasil mengagregasi {len(list_matriks)} responden menggunakan rata-rata geometrik.")
+        st.success(f"✅ Berhasil mengagregasi {len(list_matriks)} responden menggunakan rata-rata geometrik.")
 
         st.markdown("---")
-        st.markdown("## ðŸ“Š Hasil Analisis AHP Multi-Responden")
+        st.markdown("## 📊 Hasil Analisis AHP Multi-Responden")
         tampil_hasil(m, m_norm, bobot, lmax, ci, ri, cr, "Multi Responden")
 
         # Heatmap per responden
         if len(list_matriks) > 0:
             st.markdown("---")
-            st.markdown("### ðŸ”¥ Heatmap Matriks Per Responden")
+            st.markdown("### 🔥 Heatmap Matriks Per Responden")
             with st.spinner("Membuat heatmap per responden..."):
                 fig_resp = buat_chart_per_responden(list_matriks, list_nama)
                 st.pyplot(fig_resp, use_container_width=True)
                 chart_bytes = export_chart(fig_resp)
                 plt.close(fig_resp)
             st.download_button(
-                "â¬‡ï¸ Download Heatmap Per Responden (PNG)",
+                "⬇�? Download Heatmap Per Responden (PNG)",
                 data=chart_bytes,
                 file_name="ahp_per_responden.png",
                 mime="image/png"
             )
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 # HALAMAN: PANDUAN AHP
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ──────────────────────────────────────────────────────────────────────────────
 
-elif menu == "ðŸ“– Panduan AHP":
-    st.markdown('<div class="hero-header"><h1>ðŸ“– Panduan Metode AHP</h1><p>Analytical Hierarchy Process â€“ Saaty (1980)</p></div>', unsafe_allow_html=True)
+elif menu == "📖 Panduan AHP":
+    st.markdown('<div class="hero-header"><h1>📖 Panduan Metode AHP</h1><p>Analytical Hierarchy Process – Saaty (1980)</p></div>', unsafe_allow_html=True)
 
     st.markdown('<div class="ahp-card">', unsafe_allow_html=True)
     st.markdown("### Apa itu AHP?")
@@ -1083,9 +1083,9 @@ elif menu == "ðŸ“– Panduan AHP":
     st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('<div class="ahp-card">', unsafe_allow_html=True)
-    st.markdown("### ðŸ“‹ Skala Kuesioner yang Digunakan (Skala 1â€“5 Bipolar)")
+    st.markdown("### 📋 Skala Kuesioner yang Digunakan (Skala 1–5 Bipolar)")
     st.markdown("""
-    Kuesioner menggunakan **skala 1â€“5 bipolar** yang disederhanakan dari skala Saaty 1â€“9,
+    Kuesioner menggunakan **skala 1–5 bipolar** yang disederhanakan dari skala Saaty 1–9,
     agar lebih mudah diisi oleh responden. Nilai **3** di tengah berarti sama penting;
     semakin ke **1** artinya faktor kiri lebih penting, semakin ke **5** artinya faktor kanan lebih penting.
     """)
@@ -1098,51 +1098,51 @@ elif menu == "ðŸ“– Panduan AHP":
             'Faktor KANAN lebih penting',
             'Faktor KANAN jauh lebih penting',
         ],
-        'Nilai AHP (a_ij)': ['5', '3', '1', '1/3 â‰ˆ 0.333', '1/5 = 0.200'],
-        'Nilai Reciprocal (a_ji)': ['1/5 = 0.200', '1/3 â‰ˆ 0.333', '1', '3', '5'],
+        'Nilai AHP (a_ij)': ['5', '3', '1', '1/3 ≈ 0.333', '1/5 = 0.200'],
+        'Nilai Reciprocal (a_ji)': ['1/5 = 0.200', '1/3 ≈ 0.333', '1', '3', '5'],
     })
     st.dataframe(df_skala_form, use_container_width=True, hide_index=True)
     st.markdown("""
     <div class="info-box">
-    ðŸ’¡ <strong>Contoh pengisian kuesioner:</strong><br>
-    <em>Kemudahan Penggunaan â†” Keamanan Data</em> â†’ jawab <strong>2</strong> artinya
-    "Kemudahan Penggunaan lebih penting" â†’ sistem otomatis menggunakan nilai AHP = <strong>3</strong>
+    💡 <strong>Contoh pengisian kuesioner:</strong><br>
+    <em>Kemudahan Penggunaan ↔ Keamanan Data</em> → jawab <strong>2</strong> artinya
+    "Kemudahan Penggunaan lebih penting" → sistem otomatis menggunakan nilai AHP = <strong>3</strong>
     </div>
     """, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('<div class="ahp-card">', unsafe_allow_html=True)
-    st.markdown("### ðŸ”„ Proses Konversi Otomatis")
+    st.markdown("### 🔄 Proses Konversi Otomatis")
     st.markdown("""
     Sistem secara otomatis mengkonversi jawaban kuesioner ke nilai AHP yang benar:
 
     | Langkah | Proses |
     |---------|--------|
-    | 1ï¸âƒ£ | Responden mengisi kuesioner skala **1â€“5** |
-    | 2ï¸âƒ£ | Sistem konversi ke nilai **AHP Saaty** sesuai tabel di atas |
-    | 3ï¸âƒ£ | Nilai reciprocal diisi otomatis: *a_ji = 1 / a_ij* |
-    | 4ï¸âƒ£ | Jika multi-responden: agregasi dengan **rata-rata geometrik** |
-    | 5ï¸âƒ£ | Hitung **bobot prioritas** dan **uji konsistensi (CR)** |
+    | 1�?⃣ | Responden mengisi kuesioner skala **1–5** |
+    | 2�?⃣ | Sistem konversi ke nilai **AHP Saaty** sesuai tabel di atas |
+    | 3�?⃣ | Nilai reciprocal diisi otomatis: *a_ji = 1 / a_ij* |
+    | 4�?⃣ | Jika multi-responden: agregasi dengan **rata-rata geometrik** |
+    | 5�?⃣ | Hitung **bobot prioritas** dan **uji konsistensi (CR)** |
     """)
     st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('<div class="ahp-card">', unsafe_allow_html=True)
-    st.markdown("### ðŸ“ Tahapan Perhitungan AHP")
+    st.markdown("### �? Tahapan Perhitungan AHP")
     st.markdown("""
-    1. **Bangun Matriks Perbandingan Berpasangan** â€” hasil konversi dari jawaban kuesioner 1â€“5
-    2. **Normalisasi Matriks** â€” setiap elemen dibagi jumlah kolomnya
-    3. **Hitung Vektor Prioritas (Bobot)** â€” rata-rata setiap baris dari matriks ternormalisasi
+    1. **Bangun Matriks Perbandingan Berpasangan** — hasil konversi dari jawaban kuesioner 1–5
+    2. **Normalisasi Matriks** — setiap elemen dibagi jumlah kolomnya
+    3. **Hitung Vektor Prioritas (Bobot)** — rata-rata setiap baris dari matriks ternormalisasi
     4. **Uji Konsistensi**:
-       - Î»max = rata-rata dari *(Aw)áµ¢ / wáµ¢*
-       - CI = *(Î»max â€“ n) / (n â€“ 1)*
+       - λmax = rata-rata dari *(Aw)ᵢ / wᵢ*
+       - CI = *(λmax – n) / (n – 1)*
        - CR = *CI / RI*
-       - âœ… **CR â‰¤ 0.10 â†’ Konsisten** (data valid untuk penelitian)
-       - âŒ **CR > 0.10 â†’ Tidak Konsisten** (perlu ditinjau ulang oleh responden)
+       - ✅ **CR ≤ 0.10 → Konsisten** (data valid untuk penelitian)
+       - �?� **CR > 0.10 → Tidak Konsisten** (perlu ditinjau ulang oleh responden)
     """)
     st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('<div class="ahp-card">', unsafe_allow_html=True)
-    st.markdown("### ðŸ“Š Random Index (RI) â€“ Saaty (1980)")
+    st.markdown("### 📊 Random Index (RI) – Saaty (1980)")
     df_ri = pd.DataFrame({
         'n (Jumlah Kriteria)': list(RI_TABLE.keys()),
         'Random Index (RI)': list(RI_TABLE.values())
@@ -1151,13 +1151,13 @@ elif menu == "ðŸ“– Panduan AHP":
     st.markdown("""
     <div class="info-box">
     Penelitian ini menggunakan <strong>n = 5 kriteria</strong>, sehingga RI = <strong>1.12</strong>.
-    Batas konsistensi yang diterima adalah CR â‰¤ 0.10.
+    Batas konsistensi yang diterima adalah CR ≤ 0.10.
     </div>
     """, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('<div class="ahp-card">', unsafe_allow_html=True)
-    st.markdown("### ðŸ“Œ Faktor yang Dianalisis")
+    st.markdown("### 📌 Faktor yang Dianalisis")
     for i, (kode, nama) in enumerate(zip(FAKTOR_KODE, FAKTOR_SHORT)):
         st.markdown(f"""
         <div style="display:flex;align-items:center;padding:10px 0;border-bottom:1px solid #334155">
@@ -1168,10 +1168,10 @@ elif menu == "ðŸ“– Panduan AHP":
     st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('<div class="ahp-card">', unsafe_allow_html=True)
-    st.markdown("### â„¹ï¸ Referensi")
+    st.markdown("### ℹ�? Referensi")
     st.markdown("""
     - Saaty, T. L. (1980). *The Analytic Hierarchy Process*. McGraw-Hill.
-    - Saaty, T. L. (1990). *How to make a decision: The Analytic Hierarchy Process*. European Journal of Operational Research, 48(1), 9â€“26.
-    - Forman, E. H., & Gass, S. I. (2001). The Analytic Hierarchy Process â€” An Exposition. *Operations Research*, 49(4), 469â€“486.
+    - Saaty, T. L. (1990). *How to make a decision: The Analytic Hierarchy Process*. European Journal of Operational Research, 48(1), 9–26.
+    - Forman, E. H., & Gass, S. I. (2001). The Analytic Hierarchy Process — An Exposition. *Operations Research*, 49(4), 469–486.
     """)
     st.markdown('</div>', unsafe_allow_html=True)
