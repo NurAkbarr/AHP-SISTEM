@@ -730,11 +730,11 @@ if menu == "🏠 Beranda":
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("""<div class="ahp-card">
-        <h3 style="color:#F8FAFC;margin-top:0">🚀 Cara Penggunaan</h3>
-        <ol style="color:#94A3B8;line-height:2">
-            <li><strong style="color:#F8FAFC">Mode 1 – Input Agregasi</strong>: Langsung input matriks perbandingan yang sudah dirata-rata dari semua responden, atau upload Excel.</li>
-            <li><strong style="color:#F8FAFC">Mode 2 – Multi-Responden</strong>: Input matriks per responden secara terpisah, lalu sistem menghitung rata-rata geometrik otomatis.</li>
-        </ol>
+        <h3 class="dynamic-text" style="margin-top:0">🚀 Cara Penggunaan</h3>
+        <ul class="dynamic-subtext" style="line-height:2">
+            <li><strong class="dynamic-text">📊 Upload Hasil Kuesioner (Sangat Disarankan)</strong>: Upload file Excel langsung dari Google Form. Sistem otomatis mengkonversi skala 1-5, merata-ratakan seluruh responden, dan memunculkan hasil akhir seketika.</li>
+            <li><strong class="dynamic-text">📋 Input Manual</strong>: Khusus jika Anda adalah pakar tunggal (Single Decision Maker) atau Anda ingin bereksperimen langsung dengan slider perbandingan.</li>
+        </ul>
     </div>""", unsafe_allow_html=True)
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -742,12 +742,12 @@ if menu == "🏠 Beranda":
 # ──────────────────────────────────────────────────────────────────────────────
 
 elif menu == "📋 Input Manual":
-    st.markdown('<div class="hero-header"><h1>📋 Mode 1: Matriks Agregasi</h1><p>Input satu matriks perbandingan (sudah dirata-rata dari semua responden)</p></div>', unsafe_allow_html=True)
+    st.markdown('<div class="hero-header"><h1>📋 Input Manual (Pakar Tunggal)</h1><p>Input satu matriks perbandingan menggunakan slider, atau upload matriks 5x5 yang sudah jadi</p></div>', unsafe_allow_html=True)
 
     # Pilihan cara input
     cara_input = st.radio(
         "Pilih cara input data:",
-        ["⌨️ Input Manual (Slider)", "📤 Upload File Excel"],
+        ["⌨️ Input Manual (Slider)", "📤 Upload Matriks 5x5"],
         horizontal=True
     )
 
@@ -775,14 +775,10 @@ elif menu == "📋 Input Manual":
         matriks_input = widget_input_matriks("mode1", default_m)
         st.markdown('</div>', unsafe_allow_html=True)
 
-    else:  # Upload Excel
+    else:  # Upload Matriks 5x5
         st.markdown('<div class="ahp-card">', unsafe_allow_html=True)
-        st.markdown("### 📤 Upload File Excel")
-        st.markdown("""<div class="info-box">
-            Format Excel: Sheet pertama berisi matriks 5×5 dengan nilai perbandingan.
-            Baris dan kolom sesuai urutan: K1, K2, K3, K4, K5.<br>
-            <strong>Contoh file</strong>: <code>template_kuesioner_ahp.xlsx</code> yang sudah ada di folder proyek.
-        </div>""", unsafe_allow_html=True)
+        st.markdown("### 📤 Upload Matriks 5x5")
+        st.markdown("""<div class="info-box">Upload file Excel yang hanya berisi matriks 5x5 nilai AHP (bukan format kuesioner responden). Baris pertama harus berisi header nama faktor.</div>""", unsafe_allow_html=True)
         st.markdown("<br>", unsafe_allow_html=True)
 
         uploaded = st.file_uploader("Upload file Excel (.xlsx)", type=["xlsx", "xls"])
