@@ -96,7 +96,8 @@ html, body, [class*="css"] {{ font-family: 'Inter', sans-serif; }}
 ::-webkit-scrollbar {{ width: 6px; height: 6px; }}
 ::-webkit-scrollbar-track {{ background: {v['scroll_track']}; }}
 ::-webkit-scrollbar-thumb {{ background: {v['scroll_thumb']}; border-radius: 3px; }}
-p, li {{ color: {v['text']}; }}
+p, li, span, div.dynamic-text {{ color: {v['text']}; }}
+div.dynamic-subtext {{ color: {v['subtext']}; }}
 h1, h2, h3, h4, h5 {{ color: {v['text']}; }}
 label {{ color: {v['text']} !important; }}
 </style>"""
@@ -448,8 +449,8 @@ def tampil_hasil(matriks, m_norm, bobot, lambda_max, ci, ri, cr, mode_label=""):
             <div class="rank-row">
                 <span style="font-size:1.4rem;margin-right:12px">{emoji_rank[rank]}</span>
                 <div style="flex:1">
-                    <div style="color:#F8FAFC;font-weight:600">{FAKTOR_SHORT[i]}</div>
-                    <div style="color:#94A3B8;font-size:0.8rem">{FAKTOR_KODE[i]}</div>
+                    <div class="dynamic-text" style="font-weight:600">{FAKTOR_SHORT[i]}</div>
+                    <div class="dynamic-subtext" style="font-size:0.8rem">{FAKTOR_KODE[i]}</div>
                     {bar_html}
                 </div>
                 <span style="color:{WARNA[i]};font-size:1.3rem;font-weight:700;margin-left:16px">{pct:.2f}%</span>
@@ -651,8 +652,8 @@ with st.sidebar:
     st.markdown("""
     <div style="text-align:center;padding:20px 0 8px 0">
         <div style="font-size:2.5rem">📊</div>
-        <div style="color:#F8FAFC;font-size:1.1rem;font-weight:700;margin-top:6px">AHP Analyzer</div>
-        <div style="color:#64748B;font-size:0.75rem">Matla Islamic Academy</div>
+        <div class="dynamic-text" style="font-size:1.1rem;font-weight:700;margin-top:6px">AHP Analyzer</div>
+        <div class="dynamic-subtext" style="font-size:0.75rem">Matla Islamic Academy</div>
     </div>
     <hr style="border-color:#334155;margin:10px 0 12px 0">
     """, unsafe_allow_html=True)
@@ -675,7 +676,7 @@ with st.sidebar:
 
     st.markdown("""
     <hr style="border-color:#334155;margin:20px 0 12px 0">
-    <div style="color:#64748B;font-size:0.75rem;text-align:center">
+    <div class="dynamic-subtext" style="font-size:0.75rem;text-align:center">
         Metode: Analytical Hierarchy Process<br>Saaty (1980)
     </div>
     """, unsafe_allow_html=True)
