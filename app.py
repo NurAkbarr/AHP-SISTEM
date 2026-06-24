@@ -435,12 +435,12 @@ def tampil_hasil(matriks, m_norm, bobot, lambda_max, ci, ri, cr, mode_label=""):
     st.markdown("<br>", unsafe_allow_html=True)
 
     # Tabel ranking + tabs grafik
-    tab_rank, tab_chart, tab_matrix = st.tabs(["�?� Peringkat", "📊 Grafik", "🔢 Matriks Detail"])
+    tab_rank, tab_chart, tab_matrix = st.tabs(["🏆 Peringkat", "📊 Grafik", "🔢 Matriks Detail"])
 
     with tab_rank:
         st.markdown("#### Bobot Prioritas Faktor Kepuasan Pengguna")
         idx_sorted = np.argsort(bobot)[::-1]
-        emoji_rank = ["🥇", "🥈", "🥉", "4�?⃣", "5�?⃣"]
+        emoji_rank = ["🥇", "🥈", "🥉", "4⃣", "5⃣"]
         for rank, i in enumerate(idx_sorted):
             pct = bobot[i] * 100
             bar_width = int(pct * 2)
@@ -464,7 +464,7 @@ def tampil_hasil(matriks, m_norm, bobot, lambda_max, ci, ri, cr, mode_label=""):
             chart_bytes = export_chart(fig)
             plt.close(fig)
         st.download_button(
-            label="⬇�? Download Grafik (PNG)",
+            label="⬇️ Download Grafik (PNG)",
             data=chart_bytes,
             file_name=f"ahp_{mode_label.lower().replace(' ', '_')}_grafik.png" if mode_label else "ahp_grafik.png",
             mime="image/png"
@@ -484,7 +484,7 @@ def tampil_hasil(matriks, m_norm, bobot, lambda_max, ci, ri, cr, mode_label=""):
             st.dataframe(df_norm, use_container_width=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("#### ⬇�? Download Hasil")
+    st.markdown("#### ⬇️ Download Hasil")
     col_dl1, col_dl2 = st.columns(2)
     with col_dl1:
         excel_bytes = export_excel(matriks, m_norm, bobot, lambda_max, ci, ri, cr)
@@ -499,7 +499,7 @@ def tampil_hasil(matriks, m_norm, bobot, lambda_max, ci, ri, cr, mode_label=""):
         if cr <= 0.1:
             st.markdown('<div class="success-box">✓ Matriks perbandingan <strong>konsisten</strong>. Data dapat digunakan untuk penelitian.</div>', unsafe_allow_html=True)
         else:
-            st.markdown('<div class="warning-box">⚠�? CR > 0.10 → Tidak konsisten. Tinjau kembali penilaian perbandingan Anda.</div>', unsafe_allow_html=True)
+            st.markdown('<div class="warning-box">⚠️ CR > 0.10 → Tidak konsisten. Tinjau kembali penilaian perbandingan Anda.</div>', unsafe_allow_html=True)
 
 
 def widget_input_matriks(prefix: str, default_form: np.ndarray = None):
@@ -559,7 +559,7 @@ def widget_input_matriks(prefix: str, default_form: np.ndarray = None):
     np.fill_diagonal(matriks_form, 3)
 
     # Preview: tampilkan jawaban form DAN nilai AHP
-    with st.expander("�?�? Preview Matriks (Jawaban Form & Nilai AHP)", expanded=False):
+    with st.expander("👁️ Preview Matriks (Jawaban Form & Nilai AHP)", expanded=False):
         col_f, col_a = st.columns(2)
         with col_f:
             st.markdown("**Jawaban Form (Skala 1–5)**")
@@ -659,7 +659,7 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
     # ── Toggle Dark / Light Mode ──────────────────────────────────────────────
-    icon = "🌙" if st.session_state.dark_mode else "☀�?"
+    icon = "🌙" if st.session_state.dark_mode else "☀️"
     label = f"{icon} Mode {'Gelap' if st.session_state.dark_mode else 'Terang'}"
     new_dark = st.toggle(label, value=st.session_state.dark_mode, key="theme_toggle")
     if new_dark != st.session_state.dark_mode:
@@ -670,7 +670,7 @@ with st.sidebar:
 
     menu = st.radio(
         "Navigasi",
-        options=["�?� Beranda", "📋 Input Manual", "📊 Upload Hasil Kuesioner", "📖 Panduan AHP"],
+        options=["🏠 Beranda", "📋 Input Manual", "📊 Upload Hasil Kuesioner", "📖 Panduan AHP"],
         label_visibility="collapsed"
     )
 
@@ -685,7 +685,7 @@ with st.sidebar:
 # HALAMAN: BERANDA
 # ──────────────────────────────────────────────────────────────────────────────
 
-if menu == "�?� Beranda":
+if menu == "🏠 Beranda":
     st.markdown("""
     <div class="hero-header">
         <h1>📊 Analisis AHP Kepuasan Pengguna</h1>
@@ -703,7 +703,7 @@ if menu == "�?� Beranda":
         </div>""", unsafe_allow_html=True)
     with col2:
         st.markdown("""<div class="ahp-card" style="text-align:center">
-            <div style="font-size:2rem">⚖�?</div>
+            <div style="font-size:2rem">⚖️</div>
             <div style="color:#A78BFA;font-weight:700;margin:8px 0 4px">Metode AHP</div>
             <div style="color:#94A3B8;font-size:0.85rem">Analytical Hierarchy Process (Saaty, 1980)</div>
         </div>""", unsafe_allow_html=True)
@@ -747,13 +747,13 @@ elif menu == "📋 Input Manual":
     # Pilihan cara input
     cara_input = st.radio(
         "Pilih cara input data:",
-        ["�?�? Input Manual (Slider)", "📤 Upload File Excel"],
+        ["⌨️ Input Manual (Slider)", "📤 Upload File Excel"],
         horizontal=True
     )
 
     matriks_input = None
 
-    if cara_input == "�?�? Input Manual (Slider)":
+    if cara_input == "⌨️ Input Manual (Slider)":
         st.markdown('<div class="ahp-card">', unsafe_allow_html=True)
         st.markdown("### 🔢 Input Matriks Perbandingan Berpasangan")
 
@@ -807,9 +807,9 @@ elif menu == "📋 Input Manual":
                             use_container_width=True
                         )
                 else:
-                    st.error(f"�?� Ukuran matriks harus {N}×{N}. File yang diupload: {df_upload.shape[0]}×{df_upload.shape[1]}")
+                    st.error(f"❌ Ukuran matriks harus {N}×{N}. File yang diupload: {df_upload.shape[0]}×{df_upload.shape[1]}")
             except Exception as e:
-                st.error(f"�?� Gagal membaca file: {e}")
+                st.error(f"❌ Gagal membaca file: {e}")
         st.markdown('</div>', unsafe_allow_html=True)
 
     # Hitung
@@ -850,7 +850,7 @@ elif menu == "📊 Upload Hasil Kuesioner":
     col_dl, col_info = st.columns([1, 2])
     with col_dl:
         st.download_button(
-            label="⬇�? Download Template Excel",
+            label="⬇️ Download Template Excel",
             data=buat_template_excel(),
             file_name="template_kuesioner_ahp.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -876,7 +876,7 @@ elif menu == "📊 Upload Hasil Kuesioner":
                 df_ks = pd.read_excel(uploaded_ks)
 
             st.success(f"✅ File berhasil dibaca: **{len(df_ks)} baris** ditemukan")
-            with st.expander("�?�? Preview Data Kuesioner", expanded=True):
+            with st.expander("👁️ Preview Data Kuesioner", expanded=True):
                 st.dataframe(df_ks, use_container_width=True)
 
             # Deteksi kolom pair
@@ -905,7 +905,7 @@ elif menu == "📊 Upload Hasil Kuesioner":
                             error_rows.append(f"Baris {idx+1}: {e}")
 
                     for err in error_rows:
-                        st.warning(f"⚠�? {err}")
+                        st.warning(f"⚠️ {err}")
 
                     if len(list_matriks) > 0:
                         with st.spinner(f"Mengagregasi {len(list_matriks)} responden..."):
@@ -927,18 +927,18 @@ elif menu == "📊 Upload Hasil Kuesioner":
                                 chart_bytes = export_chart(fig_resp)
                                 plt.close(fig_resp)
                             st.download_button(
-                                "⬇�? Download Heatmap Per Responden (PNG)",
+                                "⬇️ Download Heatmap Per Responden (PNG)",
                                 data=chart_bytes,
                                 file_name="ahp_per_responden.png",
                                 mime="image/png"
                             )
             else:
-                st.markdown('<div class="warning-box">⚠�? Tidak dapat mendeteksi 10 kolom perbandingan. Pastikan format file sesuai template yang disediakan.</div>', unsafe_allow_html=True)
+                st.markdown('<div class="warning-box">⚠️ Tidak dapat mendeteksi 10 kolom perbandingan. Pastikan format file sesuai template yang disediakan.</div>', unsafe_allow_html=True)
                 if pair_cols:
                     st.write("Kolom terdeteksi:", pair_cols)
 
         except Exception as e:
-            st.error(f"�?� Gagal membaca file: {e}")
+            st.error(f"❌ Gagal membaca file: {e}")
 
     st.markdown('</div>', unsafe_allow_html=True)
     st.markdown('<div class="hero-header"><h1>👥 Mode 2: Multi-Responden</h1><p>Input matriks per responden → agregasi otomatis dengan rata-rata geometrik</p></div>', unsafe_allow_html=True)
@@ -951,7 +951,7 @@ elif menu == "📊 Upload Hasil Kuesioner":
 
     # Kontrol jumlah responden
     st.markdown('<div class="ahp-card">', unsafe_allow_html=True)
-    st.markdown("### ⚙�? Pengaturan Responden")
+    st.markdown("### ⚙️ Pengaturan Responden")
     col_r1, col_r2 = st.columns([1, 2])
     with col_r1:
         n_resp = st.number_input("Jumlah Responden", min_value=1, max_value=10,
@@ -975,7 +975,7 @@ elif menu == "📊 Upload Hasil Kuesioner":
     # Pilihan cara input
     cara_input_multi = st.radio(
         "Pilih cara input data per responden:",
-        ["�?�? Input Manual (Slider)", "📤 Upload File Excel per Responden"],
+        ["⌨️ Input Manual (Slider)", "📤 Upload File Excel per Responden"],
         horizontal=True
     )
 
@@ -983,7 +983,7 @@ elif menu == "📊 Upload Hasil Kuesioner":
     list_nama = []
     semua_valid = True
 
-    if cara_input_multi == "�?�? Input Manual (Slider)":
+    if cara_input_multi == "⌨️ Input Manual (Slider)":
         # Tab per responden
         tab_labels = [st.session_state.nama_responden[i] or f"Resp {i+1}" for i in range(n_resp)]
         tabs = st.tabs(tab_labels)
@@ -1026,10 +1026,10 @@ elif menu == "📊 Upload Hasil Kuesioner":
                         list_nama.append(nama)
                         st.success(f"✅ {nama}: File berhasil dibaca")
                     else:
-                        st.error(f"�?� {nama}: Ukuran matriks harus {N}×{N}")
+                        st.error(f"❌ {nama}: Ukuran matriks harus {N}×{N}")
                         semua_valid = False
                 except Exception as e:
-                    st.error(f"�?� {nama}: Gagal baca file – {e}")
+                    st.error(f"❌ {nama}: Gagal baca file – {e}")
                     semua_valid = False
             else:
                 if cara_input_multi == "📤 Upload File Excel per Responden":
@@ -1062,7 +1062,7 @@ elif menu == "📊 Upload Hasil Kuesioner":
                 chart_bytes = export_chart(fig_resp)
                 plt.close(fig_resp)
             st.download_button(
-                "⬇�? Download Heatmap Per Responden (PNG)",
+                "⬇️ Download Heatmap Per Responden (PNG)",
                 data=chart_bytes,
                 file_name="ahp_per_responden.png",
                 mime="image/png"
@@ -1119,16 +1119,16 @@ elif menu == "📖 Panduan AHP":
 
     | Langkah | Proses |
     |---------|--------|
-    | 1�?⃣ | Responden mengisi kuesioner skala **1–5** |
-    | 2�?⃣ | Sistem konversi ke nilai **AHP Saaty** sesuai tabel di atas |
-    | 3�?⃣ | Nilai reciprocal diisi otomatis: *a_ji = 1 / a_ij* |
-    | 4�?⃣ | Jika multi-responden: agregasi dengan **rata-rata geometrik** |
-    | 5�?⃣ | Hitung **bobot prioritas** dan **uji konsistensi (CR)** |
+    | 1⃣ | Responden mengisi kuesioner skala **1–5** |
+    | 2⃣ | Sistem konversi ke nilai **AHP Saaty** sesuai tabel di atas |
+    | 3⃣ | Nilai reciprocal diisi otomatis: *a_ji = 1 / a_ij* |
+    | 4⃣ | Jika multi-responden: agregasi dengan **rata-rata geometrik** |
+    | 5⃣ | Hitung **bobot prioritas** dan **uji konsistensi (CR)** |
     """)
     st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('<div class="ahp-card">', unsafe_allow_html=True)
-    st.markdown("### �? Tahapan Perhitungan AHP")
+    st.markdown("### 🔄 Tahapan Perhitungan AHP")
     st.markdown("""
     1. **Bangun Matriks Perbandingan Berpasangan** — hasil konversi dari jawaban kuesioner 1–5
     2. **Normalisasi Matriks** — setiap elemen dibagi jumlah kolomnya
@@ -1138,7 +1138,7 @@ elif menu == "📖 Panduan AHP":
        - CI = *(λmax – n) / (n – 1)*
        - CR = *CI / RI*
        - ✅ **CR ≤ 0.10 → Konsisten** (data valid untuk penelitian)
-       - �?� **CR > 0.10 → Tidak Konsisten** (perlu ditinjau ulang oleh responden)
+       - ❌ **CR > 0.10 → Tidak Konsisten** (perlu ditinjau ulang oleh responden)
     """)
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -1169,7 +1169,7 @@ elif menu == "📖 Panduan AHP":
     st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('<div class="ahp-card">', unsafe_allow_html=True)
-    st.markdown("### ℹ�? Referensi")
+    st.markdown("### ℹ️ Referensi")
     st.markdown("""
     - Saaty, T. L. (1980). *The Analytic Hierarchy Process*. McGraw-Hill.
     - Saaty, T. L. (1990). *How to make a decision: The Analytic Hierarchy Process*. European Journal of Operational Research, 48(1), 9–26.
