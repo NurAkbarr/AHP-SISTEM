@@ -890,48 +890,47 @@ elif menu == "📊 Upload Hasil Kuesioner":
                 nama_col = next((c for c in df_ks.columns
                                  if 'nama' in str(c).lower()), None)
 
-                if st.button("⚡ Proses & Hitung AHP", use_container_width=True):
-                    list_matriks = []
-                    list_nama    = []
-                    error_rows   = []
+                list_matriks = []
+                list_nama    = []
+                error_rows   = []
 
-                    for idx, row in df_ks.iterrows():
-                        try:
-                            nama = str(row[nama_col]) if nama_col else f"Responden {idx+1}"
-                            m = parse_row_to_matrix(row, pair_cols)
-                            list_matriks.append(m)
-                            list_nama.append(nama)
-                        except Exception as e:
-                            error_rows.append(f"Baris {idx+1}: {e}")
+                for idx, row in df_ks.iterrows():
+                    try:
+                        nama = str(row[nama_col]) if nama_col else f"Responden {idx+1}"
+                        m = parse_row_to_matrix(row, pair_cols)
+                        list_matriks.append(m)
+                        list_nama.append(nama)
+                    except Exception as e:
+                        error_rows.append(f"Baris {idx+1}: {e}")
 
-                    for err in error_rows:
-                        st.warning(f"⚠️ {err}")
+                for err in error_rows:
+                    st.warning(f"⚠️ {err}")
 
-                    if len(list_matriks) > 0:
-                        with st.spinner(f"Mengagregasi {len(list_matriks)} responden..."):
-                            matriks_agg = agregasi_geometric_mean(list_matriks)
-                            m, m_norm, bobot, lmax, ci, ri, cr = hitung_ahp(matriks_agg)
+                if len(list_matriks) > 0:
+                    with st.spinner(f"Mengagregasi {len(list_matriks)} responden..."):
+                        matriks_agg = agregasi_geometric_mean(list_matriks)
+                        m, m_norm, bobot, lmax, ci, ri, cr = hitung_ahp(matriks_agg)
 
-                        st.success(f"✅ Berhasil memproses **{len(list_matriks)} responden** dengan rata-rata geometrik")
+                    st.success(f"✅ Berhasil memproses **{len(list_matriks)} responden** dengan rata-rata geometrik")
+                    st.markdown("---")
+                    st.markdown("## 📊 Hasil Analisis AHP")
+                    tampil_hasil(m, m_norm, bobot, lmax, ci, ri, cr, "Kuesioner")
+
+                    # Heatmap per responden
+                    if len(list_matriks) > 1:
                         st.markdown("---")
-                        st.markdown("## 📊 Hasil Analisis AHP")
-                        tampil_hasil(m, m_norm, bobot, lmax, ci, ri, cr, "Kuesioner")
-
-                        # Heatmap per responden
-                        if len(list_matriks) > 1:
-                            st.markdown("---")
-                            st.markdown("### 🔥 Heatmap Matriks Per Responden")
-                            with st.spinner("Membuat heatmap..."):
-                                fig_resp = buat_chart_per_responden(list_matriks, list_nama)
-                                st.pyplot(fig_resp, use_container_width=True)
-                                chart_bytes = export_chart(fig_resp)
-                                plt.close(fig_resp)
-                            st.download_button(
-                                "⬇️ Download Heatmap Per Responden (PNG)",
-                                data=chart_bytes,
-                                file_name="ahp_per_responden.png",
-                                mime="image/png"
-                            )
+                        st.markdown("### 🔥 Heatmap Matriks Per Responden")
+                        with st.spinner("Membuat heatmap..."):
+                            fig_resp = buat_chart_per_responden(list_matriks, list_nama)
+                            st.pyplot(fig_resp, use_container_width=True)
+                            chart_bytes = export_chart(fig_resp)
+                            plt.close(fig_resp)
+                        st.download_button(
+                            "⬇️ Download Heatmap Per Responden (PNG)",
+                            data=chart_bytes,
+                            file_name="ahp_per_responden.png",
+                            mime="image/png"
+                        )
             else:
                 st.markdown('<div class="warning-box">⚠️ Tidak dapat mendeteksi 10 kolom perbandingan. Pastikan format file sesuai template yang disediakan.</div>', unsafe_allow_html=True)
                 if pair_cols:
@@ -941,133 +940,6 @@ elif menu == "📊 Upload Hasil Kuesioner":
             st.error(f"❌ Gagal membaca file: {e}")
 
     st.markdown('</div>', unsafe_allow_html=True)
-    st.markdown('<div class="hero-header"><h1>👥 Mode 2: Multi-Responden</h1><p>Input matriks per responden → agregasi otomatis dengan rata-rata geometrik</p></div>', unsafe_allow_html=True)
-
-    # Inisialisasi state
-    if 'n_responden' not in st.session_state:
-        st.session_state.n_responden = 3
-    if 'nama_responden' not in st.session_state:
-        st.session_state.nama_responden = [f"Responden {i+1}" for i in range(10)]
-
-    # Kontrol jumlah responden
-    st.markdown('<div class="ahp-card">', unsafe_allow_html=True)
-    st.markdown("### ⚙️ Pengaturan Responden")
-    col_r1, col_r2 = st.columns([1, 2])
-    with col_r1:
-        n_resp = st.number_input("Jumlah Responden", min_value=1, max_value=10,
-                                  value=st.session_state.n_responden, step=1)
-        st.session_state.n_responden = int(n_resp)
-    with col_r2:
-        st.markdown('<div class="info-box">Minimal 1 responden. Semakin banyak responden, semakin representatif hasil analisis.</div>', unsafe_allow_html=True)
-
-    # Input nama responden
-    st.markdown("**Nama Responden:**")
-    cols_nama = st.columns(min(n_resp, 5))
-    for i in range(n_resp):
-        with cols_nama[i % 5]:
-            st.session_state.nama_responden[i] = st.text_input(
-                f"Nama #{i+1}", value=st.session_state.nama_responden[i],
-                key=f"nama_resp_{i}", label_visibility="collapsed",
-                placeholder=f"Nama Responden {i+1}"
-            )
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    # Pilihan cara input
-    cara_input_multi = st.radio(
-        "Pilih cara input data per responden:",
-        ["⌨️ Input Manual (Slider)", "📤 Upload File Excel per Responden"],
-        horizontal=True
-    )
-
-    list_matriks = []
-    list_nama = []
-    semua_valid = True
-
-    if cara_input_multi == "⌨️ Input Manual (Slider)":
-        # Tab per responden
-        tab_labels = [st.session_state.nama_responden[i] or f"Resp {i+1}" for i in range(n_resp)]
-        tabs = st.tabs(tab_labels)
-
-        CONTOH_MATRIKS = [
-            np.array([[1,3,5,2,4],[1/3,1,3,1/2,2],[1/5,1/3,1,1/4,1/2],[1/2,2,4,1,3],[1/4,1/2,2,1/3,1]]),
-            np.array([[1,4,6,3,5],[1/4,1,3,1/2,2],[1/6,1/3,1,1/5,1/3],[1/3,2,5,1,3],[1/5,1/2,3,1/3,1]]),
-            np.array([[1,3,4,2,4],[1/3,1,2,1/2,2],[1/4,1/2,1,1/3,1],[1/2,2,3,1,3],[1/4,1/2,1,1/3,1]]),
-        ]
-
-        for i, tab in enumerate(tabs):
-            with tab:
-                st.markdown(f'<div class="ahp-card">', unsafe_allow_html=True)
-                nama = st.session_state.nama_responden[i] or f"Responden {i+1}"
-                st.markdown(f"#### Input Matriks – {nama}")
-
-                use_contoh = st.checkbox(f"Gunakan data contoh", key=f"contoh_resp_{i}")
-                default_m = CONTOH_MATRIKS[i % len(CONTOH_MATRIKS)] if use_contoh else np.ones((N, N))
-
-                m = widget_input_matriks(f"resp{i}", default_m)
-                list_matriks.append(enforce_reciprocal(m))
-                list_nama.append(nama)
-                st.markdown('</div>', unsafe_allow_html=True)
-
-    else:  # Upload Excel per responden
-        st.markdown('<div class="ahp-card">', unsafe_allow_html=True)
-        st.markdown("### 📤 Upload File Excel per Responden")
-        st.markdown("""<div class="info-box">Upload satu file Excel per responden. Setiap file berisi matriks 5×5 perbandingan berpasangan.</div>""", unsafe_allow_html=True)
-        st.markdown("<br>", unsafe_allow_html=True)
-
-        for i in range(n_resp):
-            nama = st.session_state.nama_responden[i] or f"Responden {i+1}"
-            up = st.file_uploader(f"Upload Excel – {nama}", type=["xlsx", "xls"], key=f"upload_resp_{i}")
-            if up:
-                try:
-                    df_up = pd.read_excel(up, index_col=0, header=0)
-                    if df_up.shape == (N, N):
-                        m = enforce_reciprocal(df_up.values.astype(float))
-                        list_matriks.append(m)
-                        list_nama.append(nama)
-                        st.success(f"✅ {nama}: File berhasil dibaca")
-                    else:
-                        st.error(f"❌ {nama}: Ukuran matriks harus {N}×{N}")
-                        semua_valid = False
-                except Exception as e:
-                    st.error(f"❌ {nama}: Gagal baca file – {e}")
-                    semua_valid = False
-            else:
-                if cara_input_multi == "📤 Upload File Excel per Responden":
-                    semua_valid = False
-        st.markdown('</div>', unsafe_allow_html=True)
-
-    # Hitung
-    st.markdown("<br>", unsafe_allow_html=True)
-    hitung_btn = st.button("⚡ Agregasi & Hitung AHP", use_container_width=True,
-                            disabled=(len(list_matriks) == 0))
-
-    if hitung_btn and len(list_matriks) > 0:
-        with st.spinner("Mengagregasi dan menghitung AHP..."):
-            matriks_agg = agregasi_geometric_mean(list_matriks)
-            m, m_norm, bobot, lmax, ci, ri, cr = hitung_ahp(matriks_agg)
-
-        st.success(f"✅ Berhasil mengagregasi {len(list_matriks)} responden menggunakan rata-rata geometrik.")
-
-        st.markdown("---")
-        st.markdown("## 📊 Hasil Analisis AHP Multi-Responden")
-        tampil_hasil(m, m_norm, bobot, lmax, ci, ri, cr, "Multi Responden")
-
-        # Heatmap per responden
-        if len(list_matriks) > 0:
-            st.markdown("---")
-            st.markdown("### 🔥 Heatmap Matriks Per Responden")
-            with st.spinner("Membuat heatmap per responden..."):
-                fig_resp = buat_chart_per_responden(list_matriks, list_nama)
-                st.pyplot(fig_resp, use_container_width=True)
-                chart_bytes = export_chart(fig_resp)
-                plt.close(fig_resp)
-            st.download_button(
-                "⬇️ Download Heatmap Per Responden (PNG)",
-                data=chart_bytes,
-                file_name="ahp_per_responden.png",
-                mime="image/png"
-            )
-
 # ──────────────────────────────────────────────────────────────────────────────
 # HALAMAN: PANDUAN AHP
 # ──────────────────────────────────────────────────────────────────────────────
