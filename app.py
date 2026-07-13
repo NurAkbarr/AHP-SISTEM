@@ -100,6 +100,7 @@ p, li, span, div.dynamic-text {{ color: {v['text']}; }}
 div.dynamic-subtext {{ color: {v['subtext']}; }}
 h1, h2, h3, h4, h5 {{ color: {v['text']}; }}
 label {{ color: {v['text']} !important; }}
+hr.dynamic-hr {{ border-color: {v['sidebar_border']} !important; }}
 </style>"""
 
 st.markdown(get_theme_css(st.session_state.dark_mode), unsafe_allow_html=True)
@@ -130,10 +131,16 @@ RI_TABLE = {1: 0.00, 2: 0.00, 3: 0.58, 4: 0.90, 5: 1.12,
             6: 1.24, 7: 1.32, 8: 1.41, 9: 1.45, 10: 1.49}
 
 WARNA = ['#2563EB', '#7C3AED', '#0EA5E9', '#10B981', '#F59E0B']
-WARNA_BG = '#0F172A'
-WARNA_CARD = '#1E293B'
-WARNA_TEXT = '#F8FAFC'
-WARNA_SUBTEXT = '#94A3B8'
+if st.session_state.get('dark_mode', True):
+    WARNA_BG = '#0F172A'
+    WARNA_CARD = '#1E293B'
+    WARNA_TEXT = '#F8FAFC'
+    WARNA_SUBTEXT = '#94A3B8'
+else:
+    WARNA_BG = '#FFFFFF'
+    WARNA_CARD = '#F8FAFC'
+    WARNA_TEXT = '#1E293B'
+    WARNA_SUBTEXT = '#64748B'
 
 SKALA_SAATY = {
     "1 – Sama penting": 1,
@@ -242,7 +249,7 @@ def buat_chart_lengkap(matriks, m_norm, bobot, lambda_max, ci, ri, cr, judul="")
                  fontsize=12, fontweight='bold', color=WARNA_TEXT)
         ax1.text(0.3, bar.get_y() + bar.get_height() / 2,
                  kode, va='center', ha='left',
-                 fontsize=10, fontweight='bold', color='white', alpha=0.9)
+                 fontsize=10, fontweight='bold', color=WARNA_TEXT, alpha=0.9)
     ax1.set_yticks(range(N))
     ax1.set_yticklabels(faktor_sorted, fontsize=11, color=WARNA_TEXT)
     ax1.set_xlabel('Bobot Prioritas (%)', fontsize=11, color=WARNA_SUBTEXT)
@@ -298,14 +305,14 @@ def buat_chart_lengkap(matriks, m_norm, bobot, lambda_max, ci, ri, cr, judul="")
         ax5.fill_between(np.cos(t), 0.8 * np.sin(t), np.sin(t), color=color, alpha=0.3)
     angle = np.pi - (cr_pct * np.pi)
     ax5.annotate('', xy=(0.7 * np.cos(angle), 0.7 * np.sin(angle)),
-                 xytext=(0, 0), arrowprops=dict(arrowstyle='->', color='white', lw=3))
+                 xytext=(0, 0), arrowprops=dict(arrowstyle='->', color=WARNA_TEXT, lw=3))
     cr_color = '#10B981' if cr <= 0.1 else '#EF4444'
     ax5.text(0, -0.15, f'CR = {cr:.4f}', ha='center', fontsize=15,
              fontweight='bold', color=cr_color)
     ax5.text(0, -0.35, 'KONSISTEN ✓' if cr <= 0.1 else 'TIDAK KONSISTEN ✗',
              ha='center', fontsize=12, fontweight='bold', color=cr_color)
-    ax5.text(-1.0, 0.05, '0.0\n(Ideal)', ha='center', fontsize=8, color='#64748B')
-    ax5.text(1.0, 0.05, '0.2+\n(Buruk)', ha='center', fontsize=8, color='#64748B')
+    ax5.text(-1.0, 0.05, '0.0\n(Ideal)', ha='center', fontsize=8, color=WARNA_SUBTEXT)
+    ax5.text(1.0, 0.05, '0.2+\n(Buruk)', ha='center', fontsize=8, color=WARNA_SUBTEXT)
     ax5.set_xlim(-1.2, 1.2); ax5.set_ylim(-0.5, 1.15); ax5.axis('off')
     ax5.set_title('Uji Konsistensi (CR)', fontsize=12,
                   fontweight='bold', color=WARNA_TEXT)
@@ -655,7 +662,7 @@ with st.sidebar:
         <div class="dynamic-text" style="font-size:1.1rem;font-weight:700;margin-top:6px">AHP Analyzer</div>
         <div class="dynamic-subtext" style="font-size:0.75rem">Matla Islamic Academy</div>
     </div>
-    <hr style="border-color:#334155;margin:10px 0 12px 0">
+    <hr class="dynamic-hr" style="margin:10px 0 12px 0">
     """, unsafe_allow_html=True)
 
     # ── Toggle Dark / Light Mode ──────────────────────────────────────────────
@@ -666,7 +673,7 @@ with st.sidebar:
         st.session_state.dark_mode = new_dark
         st.rerun()
 
-    st.markdown('<hr style="border-color:#334155;margin:12px 0 14px 0">', unsafe_allow_html=True)
+    st.markdown('<hr class="dynamic-hr" style="margin:12px 0 14px 0">', unsafe_allow_html=True)
 
     menu = st.radio(
         "Navigasi",
@@ -675,7 +682,7 @@ with st.sidebar:
     )
 
     st.markdown("""
-    <hr style="border-color:#334155;margin:20px 0 12px 0">
+    <hr class="dynamic-hr" style="margin:20px 0 12px 0">
     <div class="dynamic-subtext" style="font-size:0.75rem;text-align:center">
         Metode: Analytical Hierarchy Process<br>Saaty (1980)
     </div>
@@ -699,19 +706,19 @@ if menu == "🏠 Beranda":
         st.markdown("""<div class="ahp-card" style="text-align:center">
             <div style="font-size:2rem">🎯</div>
             <div style="color:#60A5FA;font-weight:700;margin:8px 0 4px">5 Kriteria</div>
-            <div style="color:#94A3B8;font-size:0.85rem">Faktor kepuasan pengguna yang dianalisis</div>
+            <div class="dynamic-subtext" style="font-size:0.85rem">Faktor kepuasan pengguna yang dianalisis</div>
         </div>""", unsafe_allow_html=True)
     with col2:
         st.markdown("""<div class="ahp-card" style="text-align:center">
             <div style="font-size:2rem">⚖️</div>
             <div style="color:#A78BFA;font-weight:700;margin:8px 0 4px">Metode AHP</div>
-            <div style="color:#94A3B8;font-size:0.85rem">Analytical Hierarchy Process (Saaty, 1980)</div>
+            <div class="dynamic-subtext" style="font-size:0.85rem">Analytical Hierarchy Process (Saaty, 1980)</div>
         </div>""", unsafe_allow_html=True)
     with col3:
         st.markdown("""<div class="ahp-card" style="text-align:center">
             <div style="font-size:2rem">✅</div>
             <div style="color:#34D399;font-weight:700;margin:8px 0 4px">Uji Konsistensi</div>
-            <div style="color:#94A3B8;font-size:0.85rem">CR ≤ 0.10 → hasil valid & dapat digunakan</div>
+            <div class="dynamic-subtext" style="font-size:0.85rem">CR ≤ 0.10 → hasil valid & dapat digunakan</div>
         </div>""", unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
@@ -871,24 +878,13 @@ elif menu == "📊 Upload Hasil Kuesioner":
             else:
                 df_ks = pd.read_excel(uploaded_ks)
 
-            st.success(f"✅ File berhasil dibaca: **{len(df_ks)} baris** ditemukan")
-            with st.expander("👁️ Preview Data Kuesioner", expanded=True):
-                st.dataframe(df_ks, use_container_width=True)
-
-            # Deteksi kolom pair
             pair_cols = find_pair_columns(list(df_ks.columns))
-
+            
             if pair_cols and len(pair_cols) == 10:
-                st.markdown(f'<div class="success-box">✓ Berhasil mendeteksi 10 kolom perbandingan</div>', unsafe_allow_html=True)
-                st.markdown("<br>", unsafe_allow_html=True)
-
-                # Cari kolom nama (opsional)
-                nama_col = next((c for c in df_ks.columns
-                                 if 'nama' in str(c).lower()), None)
-
+                nama_col = next((c for c in df_ks.columns if 'nama' in str(c).lower()), None)
                 list_matriks = []
-                list_nama    = []
-                error_rows   = []
+                list_nama = []
+                error_rows = []
 
                 for idx, row in df_ks.iterrows():
                     try:
@@ -899,41 +895,75 @@ elif menu == "📊 Upload Hasil Kuesioner":
                     except Exception as e:
                         error_rows.append(f"Baris {idx+1}: {e}")
 
-                for err in error_rows:
-                    st.warning(f"⚠️ {err}")
-
                 if len(list_matriks) > 0:
-                    with st.spinner(f"Mengagregasi {len(list_matriks)} responden..."):
-                        matriks_agg = agregasi_geometric_mean(list_matriks)
-                        m, m_norm, bobot, lmax, ci, ri, cr = hitung_ahp(matriks_agg)
-
-                    st.success(f"✅ Berhasil memproses **{len(list_matriks)} responden** dengan rata-rata geometrik")
-                    st.markdown("---")
-                    st.markdown("## 📊 Hasil Analisis AHP")
-                    tampil_hasil(m, m_norm, bobot, lmax, ci, ri, cr, "Kuesioner")
-
-                    # Heatmap per responden
-                    if len(list_matriks) > 1:
-                        st.markdown("---")
-                        st.markdown("### 🔥 Heatmap Matriks Per Responden")
-                        with st.spinner("Membuat heatmap..."):
-                            fig_resp = buat_chart_per_responden(list_matriks, list_nama)
-                            st.pyplot(fig_resp, use_container_width=True)
-                            chart_bytes = export_chart(fig_resp)
-                            plt.close(fig_resp)
-                        st.download_button(
-                            "⬇️ Download Heatmap Per Responden (PNG)",
-                            data=chart_bytes,
-                            file_name="ahp_per_responden.png",
-                            mime="image/png"
-                        )
+                    matriks_agg = agregasi_geometric_mean(list_matriks)
+                    m, m_norm, bobot, lmax, ci, ri, cr = hitung_ahp(matriks_agg)
+                    
+                    st.session_state.kuesioner_data = {
+                        'df_ks': df_ks,
+                        'pair_cols': pair_cols,
+                        'error_rows': error_rows,
+                        'list_matriks': list_matriks,
+                        'list_nama': list_nama,
+                        'hasil': (m, m_norm, bobot, lmax, ci, ri, cr)
+                    }
             else:
-                st.markdown('<div class="warning-box">⚠️ Tidak dapat mendeteksi 10 kolom perbandingan. Pastikan format file sesuai template yang disediakan.</div>', unsafe_allow_html=True)
-                if pair_cols:
-                    st.write("Kolom terdeteksi:", pair_cols)
-
+                st.session_state.kuesioner_error = (pair_cols, "Tidak dapat mendeteksi 10 kolom perbandingan.")
+                
         except Exception as e:
-            st.error(f"❌ Gagal membaca file: {e}")
+            st.session_state.kuesioner_error = (None, f"Gagal membaca file: {e}")
+
+    # Render results from session state if available
+    if 'kuesioner_error' in st.session_state:
+        pair_cols, msg = st.session_state.kuesioner_error
+        st.markdown(f'<div class="warning-box">⚠️ {msg}</div>', unsafe_allow_html=True)
+        if pair_cols:
+            st.write("Kolom terdeteksi:", pair_cols)
+        if st.button("🗑️ Hapus Error"):
+            del st.session_state.kuesioner_error
+            st.rerun()
+
+    elif 'kuesioner_data' in st.session_state:
+        data = st.session_state.kuesioner_data
+        
+        st.success(f"✅ File berhasil dibaca: **{len(data['df_ks'])} baris** ditemukan")
+        with st.expander("👁️ Preview Data Kuesioner", expanded=False):
+            st.dataframe(data['df_ks'], use_container_width=True)
+            
+        st.markdown(f'<div class="success-box">✓ Berhasil mendeteksi 10 kolom perbandingan</div>', unsafe_allow_html=True)
+        st.markdown("<br>", unsafe_allow_html=True)
+        
+        for err in data['error_rows']:
+            st.warning(f"⚠️ {err}")
+            
+        st.success(f"✅ Berhasil memproses **{len(data['list_matriks'])} responden** dengan rata-rata geometrik")
+        
+        col_btn1, col_btn2 = st.columns([1, 4])
+        with col_btn1:
+            if st.button("🗑️ Hapus Data", use_container_width=True):
+                del st.session_state.kuesioner_data
+                st.rerun()
+
+        st.markdown("---")
+        st.markdown("## 📊 Hasil Analisis AHP")
+        
+        m, m_norm, bobot, lmax, ci, ri, cr = data['hasil']
+        tampil_hasil(m, m_norm, bobot, lmax, ci, ri, cr, "Kuesioner")
+
+        if len(data['list_matriks']) > 1:
+            st.markdown("---")
+            st.markdown("### 🔥 Heatmap Matriks Per Responden")
+            fig_resp = buat_chart_per_responden(data['list_matriks'], data['list_nama'])
+            st.pyplot(fig_resp, use_container_width=True)
+            chart_bytes = export_chart(fig_resp)
+            plt.close(fig_resp)
+            st.download_button(
+                "⬇️ Download Heatmap Per Responden (PNG)",
+                data=chart_bytes,
+                file_name="ahp_per_responden.png",
+                mime="image/png",
+                key="dl_heatmap"
+            )
 
     st.markdown('</div>', unsafe_allow_html=True)
 # ──────────────────────────────────────────────────────────────────────────────
