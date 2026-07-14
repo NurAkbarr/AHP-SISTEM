@@ -117,13 +117,13 @@ st.markdown(get_theme_css(st.session_state.dark_mode), unsafe_allow_html=True)
 # KONSTANTA
 # ──────────────────────────────────────────────────────────────────────────────
 
-FAKTOR_SHORT = [
+FAKTOR_SHORT = st.session_state.get('faktor_short', [
     "Kemudahan Penggunaan",
     "Kelengkapan Fitur",
     "Kecepatan Akses",
     "Keamanan Data",
     "Kemudahan Pencarian Arsip"
-]
+])
 FAKTOR_KODE = ["K1", "K2", "K3", "K4", "K5"]
 N = 5
 
@@ -589,17 +589,31 @@ def widget_input_matriks(prefix: str, default_form: np.ndarray = None):
 # ──────────────────────────────────────────────────────────────────────────────
 
 PAIRS_INFO = [
-    (0, 1, "Kemudahan Penggunaan ↔ Kelengkapan Fitur"),
-    (0, 2, "Kemudahan Penggunaan ↔ Kecepatan Akses"),
-    (0, 3, "Kemudahan Penggunaan ↔ Keamanan Data"),
-    (0, 4, "Kemudahan Penggunaan ↔ Kemudahan Pencarian Arsip"),
-    (1, 2, "Kelengkapan Fitur ↔ Kecepatan Akses"),
-    (1, 3, "Kelengkapan Fitur ↔ Keamanan Data"),
-    (1, 4, "Kelengkapan Fitur ↔ Kemudahan Pencarian Arsip"),
-    (2, 3, "Kecepatan Akses ↔ Keamanan Data"),
-    (2, 4, "Kecepatan Akses ↔ Kemudahan Pencarian Arsip"),
-    (3, 4, "Keamanan Data ↔ Kemudahan Pencarian Arsip"),
+    (0, 1, f"{FAKTOR_SHORT[0]} ↔ {FAKTOR_SHORT[1]}"),
+    (0, 2, f"{FAKTOR_SHORT[0]} ↔ {FAKTOR_SHORT[2]}"),
+    (0, 3, f"{FAKTOR_SHORT[0]} ↔ {FAKTOR_SHORT[3]}"),
+    (0, 4, f"{FAKTOR_SHORT[0]} ↔ {FAKTOR_SHORT[4]}"),
+    (1, 2, f"{FAKTOR_SHORT[1]} ↔ {FAKTOR_SHORT[2]}"),
+    (1, 3, f"{FAKTOR_SHORT[1]} ↔ {FAKTOR_SHORT[3]}"),
+    (1, 4, f"{FAKTOR_SHORT[1]} ↔ {FAKTOR_SHORT[4]}"),
+    (2, 3, f"{FAKTOR_SHORT[2]} ↔ {FAKTOR_SHORT[3]}"),
+    (2, 4, f"{FAKTOR_SHORT[2]} ↔ {FAKTOR_SHORT[4]}"),
+    (3, 4, f"{FAKTOR_SHORT[3]} ↔ {FAKTOR_SHORT[4]}"),
 ]
+
+def extract_factors_from_pairs(pair_cols):
+    factors = []
+    if not pair_cols: return None
+    for c in pair_cols:
+        parts = str(c).split('\u2194')
+        if len(parts) == 2:
+            for p in parts:
+                clean_p = p.strip()
+                if clean_p not in factors:
+                    factors.append(clean_p)
+    if len(factors) == 5:
+        return factors
+    return None
 
 def find_pair_columns(cols: list):
     """Deteksi otomatis 10 kolom perbandingan dari header spreadsheet."""
@@ -881,6 +895,12 @@ elif menu == "📊 Upload Hasil Kuesioner":
             pair_cols = find_pair_columns(list(df_ks.columns))
             
             if pair_cols and len(pair_cols) == 10:
+                extracted = extract_factors_from_pairs(pair_cols)
+                needs_rerun = False
+                if extracted and extracted != st.session_state.get('faktor_short'):
+                    st.session_state.faktor_short = extracted
+                    needs_rerun = True
+                    
                 nama_col = next((c for c in df_ks.columns if 'nama' in str(c).lower()), None)
                 list_matriks = []
                 list_nama = []
@@ -907,6 +927,8 @@ elif menu == "📊 Upload Hasil Kuesioner":
                         'list_nama': list_nama,
                         'hasil': (m, m_norm, bobot, lmax, ci, ri, cr)
                     }
+                    if needs_rerun:
+                        st.rerun()
             else:
                 st.session_state.kuesioner_error = (pair_cols, "Tidak dapat mendeteksi 10 kolom perbandingan.")
                 
@@ -942,6 +964,8 @@ elif menu == "📊 Upload Hasil Kuesioner":
         with col_btn1:
             if st.button("🗑️ Hapus Data", use_container_width=True):
                 del st.session_state.kuesioner_data
+                if 'faktor_short' in st.session_state:
+                    del st.session_state.faktor_short
                 st.rerun()
 
         st.markdown("---")
