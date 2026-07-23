@@ -901,6 +901,9 @@ elif menu == "📊 Upload Hasil Kuesioner":
                     st.session_state.faktor_short = extracted
                     needs_rerun = True
                     
+                # Hapus baris yang kosong pada bagian jawaban kuesioner
+                df_ks = df_ks.dropna(subset=pair_cols, how='all')
+                
                 nama_col = next((c for c in df_ks.columns if 'nama' in str(c).lower()), None)
                 list_matriks = []
                 list_nama = []
