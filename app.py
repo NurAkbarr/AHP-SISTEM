@@ -131,16 +131,24 @@ RI_TABLE = {1: 0.00, 2: 0.00, 3: 0.58, 4: 0.90, 5: 1.12,
             6: 1.24, 7: 1.32, 8: 1.41, 9: 1.45, 10: 1.49}
 
 WARNA = ['#2563EB', '#7C3AED', '#0EA5E9', '#10B981', '#F59E0B']
+
+# Warna UI Web (Dinamis sesuai toggle)
 if st.session_state.get('dark_mode', True):
-    WARNA_BG = '#0F172A'
-    WARNA_CARD = '#1E293B'
-    WARNA_TEXT = '#F8FAFC'
-    WARNA_SUBTEXT = '#94A3B8'
+    WEB_BG = '#0F172A'
+    WEB_CARD = '#1E293B'
+    WEB_TEXT = '#F8FAFC'
+    WEB_SUBTEXT = '#94A3B8'
 else:
-    WARNA_BG = '#FFFFFF'
-    WARNA_CARD = '#F8FAFC'
-    WARNA_TEXT = '#1E293B'
-    WARNA_SUBTEXT = '#64748B'
+    WEB_BG = '#FFFFFF'
+    WEB_CARD = '#F8FAFC'
+    WEB_TEXT = '#1E293B'
+    WEB_SUBTEXT = '#64748B'
+
+# Warna Matplotlib (SELALU LIGHT MODE - Agar mudah dibaca & didownload untuk laporan)
+CHART_BG = '#FFFFFF'
+CHART_CARD = '#F8FAFC'
+CHART_TEXT = '#1E293B'
+CHART_SUBTEXT = '#475569'
 
 SKALA_SAATY = {
     "1 – Sama penting": 1,
@@ -230,72 +238,72 @@ def buat_chart_lengkap(matriks, m_norm, bobot, lambda_max, ci, ri, cr, judul="")
     kode_sorted = [FAKTOR_KODE[i] for i in idx_sorted]
     warna_sorted = [WARNA[i % len(WARNA)] for i in idx_sorted]
 
-    fig = plt.figure(figsize=(18, 20), facecolor=WARNA_BG)
+    fig = plt.figure(figsize=(18, 20), facecolor=CHART_BG)
     gs = GridSpec(3, 2, figure=fig, hspace=0.45, wspace=0.35,
                   top=0.94, bottom=0.04, left=0.07, right=0.97)
 
     if judul:
         fig.text(0.5, 0.97, judul, ha='center', va='top',
-                 fontsize=15, fontweight='bold', color=WARNA_TEXT)
+                 fontsize=15, fontweight='bold', color=CHART_TEXT)
 
     # Bar chart
     ax1 = fig.add_subplot(gs[0, :])
-    ax1.set_facecolor(WARNA_CARD)
+    ax1.set_facecolor(CHART_CARD)
     bars = ax1.barh(range(N), bobot_sorted * 100,
                     color=warna_sorted, height=0.55, edgecolor='none')
     for bar, val, kode in zip(bars, bobot_sorted, kode_sorted):
         ax1.text(bar.get_width() + 0.3, bar.get_y() + bar.get_height() / 2,
                  f'{val * 100:.2f}%', va='center', ha='left',
-                 fontsize=12, fontweight='bold', color=WARNA_TEXT)
+                 fontsize=12, fontweight='bold', color=CHART_TEXT)
         ax1.text(0.3, bar.get_y() + bar.get_height() / 2,
                  kode, va='center', ha='left',
-                 fontsize=10, fontweight='bold', color=WARNA_TEXT, alpha=0.9)
+                 fontsize=10, fontweight='bold', color=CHART_TEXT, alpha=0.9)
     ax1.set_yticks(range(N))
-    ax1.set_yticklabels(faktor_sorted, fontsize=11, color=WARNA_TEXT)
-    ax1.set_xlabel('Bobot Prioritas (%)', fontsize=11, color=WARNA_SUBTEXT)
+    ax1.set_yticklabels(faktor_sorted, fontsize=11, color=CHART_TEXT)
+    ax1.set_xlabel('Bobot Prioritas (%)', fontsize=11, color=CHART_SUBTEXT)
     ax1.set_title('Peringkat Bobot Prioritas Faktor Kepuasan Pengguna',
-                  fontsize=13, fontweight='bold', color=WARNA_TEXT, pad=10)
-    ax1.tick_params(colors=WARNA_SUBTEXT)
-    ax1.spines[:].set_color(WARNA_CARD)
+                  fontsize=13, fontweight='bold', color=CHART_TEXT, pad=10)
+    ax1.tick_params(colors=CHART_SUBTEXT)
+    ax1.spines[:].set_color(CHART_CARD)
     ax1.set_xlim(0, max(bobot_sorted * 100) * 1.15)
     ax1.invert_yaxis()
     ax1.grid(axis='x', color='#334155', linestyle='--', alpha=0.5)
 
     # Pie chart
     ax2 = fig.add_subplot(gs[1, 0])
-    ax2.set_facecolor(WARNA_CARD)
+    ax2.set_facecolor(CHART_CARD)
     _pie_result = ax2.pie(
         bobot_sorted, colors=warna_sorted, autopct='%1.2f%%',
         startangle=90, pctdistance=0.75,
-        wedgeprops=dict(edgecolor=WARNA_BG, linewidth=2.5))
+        wedgeprops=dict(edgecolor=CHART_BG, linewidth=2.5))
     wedges, texts, autotexts = _pie_result[0], _pie_result[1], _pie_result[2]
     for at in autotexts:
         at.set_color('white'); at.set_fontsize(9); at.set_fontweight('bold')
     legend_labels = [f"{k}: {f}" for k, f in zip(kode_sorted, faktor_sorted)]
     ax2.legend(wedges, legend_labels, loc='lower center',
                bbox_to_anchor=(0.5, -0.20), fontsize=8,
-               frameon=False, labelcolor=WARNA_TEXT, ncol=1)
+               frameon=False, labelcolor=CHART_TEXT, ncol=1)
     ax2.set_title('Distribusi Bobot', fontsize=12,
-                  fontweight='bold', color=WARNA_TEXT, pad=10)
+                  fontweight='bold', color=CHART_TEXT, pad=10)
 
     # Heatmap
     ax3 = fig.add_subplot(gs[1, 1])
-    ax3.set_facecolor(WARNA_CARD)
+    ax3.set_facecolor(CHART_CARD)
     log_m = np.log(matriks + 1e-10)
     sns.heatmap(log_m, ax=ax3, cmap='coolwarm',
                 annot=matriks.round(2), fmt='.2f',
                 xticklabels=FAKTOR_KODE, yticklabels=FAKTOR_KODE,
-                linewidths=0.5, linecolor=WARNA_BG,
+                linewidths=0.5, linecolor=CHART_BG,
                 cbar_kws={'label': 'Log(nilai)'})
     ax3.set_title('Heatmap Matriks Perbandingan',
-                  fontsize=12, fontweight='bold', color=WARNA_TEXT, pad=10)
-    ax3.tick_params(colors=WARNA_TEXT)
-    ax3.set_xticklabels(FAKTOR_KODE, color=WARNA_TEXT, fontsize=9)
-    ax3.set_yticklabels(FAKTOR_KODE, color=WARNA_TEXT, fontsize=9, rotation=0)
+                  fontsize=12, fontweight='bold', color=CHART_TEXT, pad=10)
+    ax3.tick_params(colors=CHART_TEXT)
+    ax3.set_xticklabels(FAKTOR_KODE, color=CHART_TEXT, fontsize=9)
+    ax3.set_yticklabels(FAKTOR_KODE, color=CHART_TEXT, fontsize=9, rotation=0)
 
     # Gauge konsistensi
     ax5 = fig.add_subplot(gs[2, 0])
-    ax5.set_facecolor(WARNA_CARD)
+    ax5.set_facecolor(CHART_CARD)
     ax5.set_aspect('equal')
     theta = np.linspace(np.pi, 0, 200)
     cr_pct = min(cr, 0.2) / 0.2
@@ -305,21 +313,21 @@ def buat_chart_lengkap(matriks, m_norm, bobot, lambda_max, ci, ri, cr, judul="")
         ax5.fill_between(np.cos(t), 0.8 * np.sin(t), np.sin(t), color=color, alpha=0.3)
     angle = np.pi - (cr_pct * np.pi)
     ax5.annotate('', xy=(0.7 * np.cos(angle), 0.7 * np.sin(angle)),
-                 xytext=(0, 0), arrowprops=dict(arrowstyle='->', color=WARNA_TEXT, lw=3))
+                 xytext=(0, 0), arrowprops=dict(arrowstyle='->', color=CHART_TEXT, lw=3))
     cr_color = '#10B981' if cr <= 0.1 else '#EF4444'
     ax5.text(0, -0.15, f'CR = {cr:.4f}', ha='center', fontsize=15,
              fontweight='bold', color=cr_color)
     ax5.text(0, -0.35, 'KONSISTEN ✓' if cr <= 0.1 else 'TIDAK KONSISTEN ✗',
              ha='center', fontsize=12, fontweight='bold', color=cr_color)
-    ax5.text(-1.0, 0.05, '0.0\n(Ideal)', ha='center', fontsize=8, color=WARNA_SUBTEXT)
-    ax5.text(1.0, 0.05, '0.2+\n(Buruk)', ha='center', fontsize=8, color=WARNA_SUBTEXT)
+    ax5.text(-1.0, 0.05, '0.0\n(Ideal)', ha='center', fontsize=8, color=CHART_SUBTEXT)
+    ax5.text(1.0, 0.05, '0.2+\n(Buruk)', ha='center', fontsize=8, color=CHART_SUBTEXT)
     ax5.set_xlim(-1.2, 1.2); ax5.set_ylim(-0.5, 1.15); ax5.axis('off')
     ax5.set_title('Uji Konsistensi (CR)', fontsize=12,
-                  fontweight='bold', color=WARNA_TEXT)
+                  fontweight='bold', color=CHART_TEXT)
 
     # Ringkasan
     ax6 = fig.add_subplot(gs[2, 1])
-    ax6.set_facecolor(WARNA_CARD)
+    ax6.set_facecolor(CHART_CARD)
     ax6.axis('off')
     prioritas_utama = FAKTOR_SHORT[np.argmax(bobot)]
     info_items = [
@@ -336,11 +344,11 @@ def buat_chart_lengkap(matriks, m_norm, bobot, lambda_max, ci, ri, cr, judul="")
     y_pos = 0.95
     ax6.text(0.05, y_pos, "Ringkasan Hasil Analisis AHP",
              transform=ax6.transAxes, fontsize=11, fontweight='bold',
-             color=WARNA_TEXT, va='top')
+             color=CHART_TEXT, va='top')
     for label, value in info_items:
         y_pos -= 0.09
         ax6.text(0.05, y_pos, f"  {label}", transform=ax6.transAxes,
-                 fontsize=9, color=WARNA_SUBTEXT, va='top')
+                 fontsize=9, color=CHART_SUBTEXT, va='top')
         val_color = '#F87171' if ("TIDAK" in value) else '#60A5FA'
         ax6.text(0.95, y_pos, value, transform=ax6.transAxes,
                  fontsize=9, color=val_color, fontweight='bold', va='top', ha='right')
@@ -354,19 +362,19 @@ def buat_chart_per_responden(list_matriks, list_nama):
     n_resp = len(list_matriks)
     cols = 2
     rows = (n_resp + 1) // 2
-    fig, axes = plt.subplots(rows, cols, figsize=(14, 5 * rows), facecolor=WARNA_BG)
+    fig, axes = plt.subplots(rows, cols, figsize=(14, 5 * rows), facecolor=CHART_BG)
     axes = axes.flatten() if n_resp > 1 else [axes]
     fig.suptitle('Matriks Perbandingan Per Responden',
-                 fontsize=14, fontweight='bold', color=WARNA_TEXT, y=1.01)
+                 fontsize=14, fontweight='bold', color=CHART_TEXT, y=1.01)
     for idx, (mat, nama) in enumerate(zip(list_matriks, list_nama)):
         ax = axes[idx]
-        ax.set_facecolor(WARNA_CARD)
+        ax.set_facecolor(CHART_CARD)
         sns.heatmap(np.log(mat + 1e-10), ax=ax, cmap='RdYlGn',
                     annot=mat.round(2), fmt='.2f',
                     xticklabels=FAKTOR_KODE, yticklabels=FAKTOR_KODE,
                     linewidths=0.3, cbar=False)
-        ax.set_title(f"Responden: {nama}", fontsize=10, color=WARNA_TEXT, fontweight='bold')
-        ax.tick_params(colors=WARNA_TEXT)
+        ax.set_title(f"Responden: {nama}", fontsize=10, color=CHART_TEXT, fontweight='bold')
+        ax.tick_params(colors=CHART_TEXT)
     for idx in range(n_resp, len(axes)):
         axes[idx].axis('off')
     plt.tight_layout()
@@ -402,7 +410,7 @@ def export_excel(matriks, m_norm, bobot, lambda_max, ci, ri, cr) -> bytes:
 def export_chart(fig) -> bytes:
     buf = io.BytesIO()
     fig.savefig(buf, format='png', dpi=150, bbox_inches='tight',
-                facecolor=WARNA_BG, edgecolor='none')
+                facecolor=CHART_BG, edgecolor='none')
     buf.seek(0)
     return buf.getvalue()
 
