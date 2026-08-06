@@ -922,13 +922,26 @@ elif menu == "📊 Upload Hasil Kuesioner":
                 list_matriks = []
                 list_nama = []
                 error_rows = []
+                inconsistent_rows = []
+                konsisten_count = 0
+                tidak_konsisten_count = 0
 
                 for idx, row in df_ks.iterrows():
                     try:
                         nama = str(row[nama_col]) if nama_col else f"Responden {idx+1}"
                         m = parse_row_to_matrix(row, pair_cols)
-                        list_matriks.append(m)
-                        list_nama.append(nama)
+                        
+                        # Cek konsistensi tiap responden sebelum digabungkan
+                        _, _, _, _, _, _, cr = hitung_ahp(m)
+                        
+                        if cr <= 0.1:
+                            list_matriks.append(m)
+                            list_nama.append(nama)
+                            konsisten_count += 1
+                        else:
+                            inconsistent_rows.append(f"{nama} (CR = {cr:.4f})")
+                            tidak_konsisten_count += 1
+                            
                     except Exception as e:
                         error_rows.append(f"Baris {idx+1}: {e}")
 
@@ -940,8 +953,11 @@ elif menu == "📊 Upload Hasil Kuesioner":
                         'df_ks': df_ks,
                         'pair_cols': pair_cols,
                         'error_rows': error_rows,
+                        'inconsistent_rows': inconsistent_rows,
                         'list_matriks': list_matriks,
                         'list_nama': list_nama,
+                        'konsisten_count': konsisten_count,
+                        'tidak_konsisten_count': tidak_konsisten_count,
                         'hasil': (m, m_norm, bobot, lmax, ci, ri, cr)
                     }
                     if needs_rerun:
@@ -975,7 +991,13 @@ elif menu == "📊 Upload Hasil Kuesioner":
         for err in data['error_rows']:
             st.warning(f"⚠️ {err}")
             
-        st.success(f"✅ Berhasil memproses **{len(data['list_matriks'])} responden** dengan rata-rata geometrik")
+        st.success(f"✅ Berhasil memproses **{data['konsisten_count']} responden konsisten** dengan rata-rata geometrik.")
+        
+        if data['tidak_konsisten_count'] > 0:
+            st.error(f"❌ Membuang **{data['tidak_konsisten_count']} responden tidak konsisten** (CR > 0.1):")
+            with st.expander("Lihat daftar responden tidak konsisten", expanded=False):
+                for incon_err in data['inconsistent_rows']:
+                    st.write(f"- {incon_err}")
         
         col_btn1, col_btn2 = st.columns([1, 4])
         with col_btn1:
