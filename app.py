@@ -898,7 +898,13 @@ elif menu == "📊 Upload Hasil Kuesioner":
             if uploaded_ks.name.endswith('.csv'):
                 df_ks = pd.read_csv(uploaded_ks)
             else:
-                df_ks = pd.read_excel(uploaded_ks)
+                xls = pd.ExcelFile(uploaded_ks)
+                sheet_names = xls.sheet_names
+                if len(sheet_names) > 1:
+                    sheet_selected = st.selectbox("📂 File memiliki beberapa sheet. Pilih Sheet yang berisi jawaban kuesioner:", sheet_names)
+                    df_ks = pd.read_excel(uploaded_ks, sheet_name=sheet_selected)
+                else:
+                    df_ks = pd.read_excel(uploaded_ks)
 
             pair_cols = find_pair_columns(list(df_ks.columns))
             
