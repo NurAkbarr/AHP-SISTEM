@@ -209,14 +209,23 @@ def enforce_reciprocal(matriks: np.ndarray) -> np.ndarray:
 
 def hitung_ahp(matriks: np.ndarray):
     m = enforce_reciprocal(matriks)
+    
+    # Nilai m_norm tetap dihitung untuk keperluan tabel visualisasi (pendekatan)
     jumlah_kolom = m.sum(axis=0)
     m_norm = m / jumlah_kolom
-    bobot = m_norm.mean(axis=1)
-    weighted_sum = np.dot(m, bobot)
-    lambda_max = np.mean(weighted_sum / bobot)
+    
+    # Menghitung Bobot Prioritas & Eigen Value menggunakan metode Eigenvector (Metode Klasik AHP)
+    eigenvalues, eigenvectors = np.linalg.eig(m)
+    idx = np.argmax(eigenvalues.real)
+    lambda_max = eigenvalues[idx].real
+    
+    bobot = eigenvectors[:, idx].real
+    bobot = bobot / bobot.sum()  # Normalisasi bobot agar totalnya 1
+    
     ci = (lambda_max - N) / (N - 1)
     ri = RI_TABLE.get(N, 1.12)
     cr = ci / ri
+    
     return m, m_norm, bobot, lambda_max, ci, ri, cr
 
 def agregasi_geometric_mean(list_matriks: list) -> np.ndarray:
@@ -922,25 +931,21 @@ elif menu == "📊 Upload Hasil Kuesioner":
                 list_matriks = []
                 list_nama = []
                 error_rows = []
-                inconsistent_rows = []
-                konsisten_count = 0
-                tidak_konsisten_count = 0
+                cr_list = []
 
                 for idx, row in df_ks.iterrows():
                     try:
                         nama = str(row[nama_col]) if nama_col else f"Responden {idx+1}"
                         m = parse_row_to_matrix(row, pair_cols)
                         
-                        # Cek konsistensi tiap responden sebelum digabungkan
+                        # Hitung CR masing-masing responden sebagai catatan saja, JANGAN dibuang
                         _, _, _, _, _, _, cr = hitung_ahp(m)
                         
-                        if cr <= 0.1:
-                            list_matriks.append(m)
-                            list_nama.append(nama)
-                            konsisten_count += 1
-                        else:
-                            inconsistent_rows.append(f"{nama} (CR = {cr:.4f})")
-                            tidak_konsisten_count += 1
+                        status = "Konsisten" if cr <= 0.1 else ("Hampir" if cr <= 0.15 else "Tidak")
+                        cr_list.append({"Responden": nama, "CR": cr, "Status": status})
+                        
+                        list_matriks.append(m)
+                        list_nama.append(nama)
                             
                     except Exception as e:
                         error_rows.append(f"Baris {idx+1}: {e}")
@@ -953,11 +958,9 @@ elif menu == "📊 Upload Hasil Kuesioner":
                         'df_ks': df_ks,
                         'pair_cols': pair_cols,
                         'error_rows': error_rows,
-                        'inconsistent_rows': inconsistent_rows,
+                        'cr_list': cr_list,
                         'list_matriks': list_matriks,
                         'list_nama': list_nama,
-                        'konsisten_count': konsisten_count,
-                        'tidak_konsisten_count': tidak_konsisten_count,
                         'hasil': (m, m_norm, bobot, lmax, ci, ri, cr)
                     }
                     if needs_rerun:
@@ -991,14 +994,13 @@ elif menu == "📊 Upload Hasil Kuesioner":
         for err in data['error_rows']:
             st.warning(f"⚠️ {err}")
             
-        st.success(f"✅ Berhasil memproses **{data['konsisten_count']} responden konsisten** dengan rata-rata geometrik.")
+        st.success(f"✅ Berhasil memproses **{len(data['list_matriks'])} responden** dengan rata-rata geometrik.")
         
-        if data['tidak_konsisten_count'] > 0:
-            st.error(f"❌ Membuang **{data['tidak_konsisten_count']} responden tidak konsisten** (CR > 0.1):")
-            with st.expander("Lihat daftar responden tidak konsisten", expanded=False):
-                for incon_err in data['inconsistent_rows']:
-                    st.write(f"- {incon_err}")
-        
+        with st.expander("📊 Lihat Laporan Distribusi CR Responden", expanded=False):
+            df_cr = pd.DataFrame(data['cr_list'])
+            st.dataframe(df_cr, use_container_width=True)
+            st.markdown("*Catatan: Seluruh responden di atas tetap diikutsertakan dalam agregasi geometrik sesuai standar penelitian kuesioner pengguna.*")
+            
         col_btn1, col_btn2 = st.columns([1, 4])
         with col_btn1:
             if st.button("🗑️ Hapus Data", use_container_width=True):
